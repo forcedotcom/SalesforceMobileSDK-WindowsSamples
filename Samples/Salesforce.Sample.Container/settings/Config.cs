@@ -25,17 +25,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+using System;
 using Windows.UI;
 using Salesforce.SDK.Settings;
-using System;
 
-namespace Salesforce.Sample.RestExplorer.Shared
+namespace Salesforce.Sample.Container.Settings
 {
-    public class Config : SalesforceConfig
+    internal class Config : SalesforceConfig
     {
-        /// <summary>
-        ///     In using this sample you should create a connected app, and replace the ClientId with an id from the generated app.
-        /// </summary>
         public override string ClientId
         {
             get { return "3MVG9Iu66FKeHhINkB1l7xt7kR8czFcCTUhgoA8Ol2Ltf1eYHOU4SqQRSEitYFDUpqRWcoQ2.dBv_a1Dyu5xa"; }
@@ -48,22 +45,24 @@ namespace Salesforce.Sample.RestExplorer.Shared
 
         public override string[] Scopes
         {
-            get { return new[] {"api"}; }
+            get { return new[] { "web", "api" }; }
         }
 
         public override Int32 LoginBackgroundColor
         {
-            get { return ColorToInt32(Colors.DarkOrange); }
+            get { return ColorToInt32(Colors.DeepSkyBlue); }
         }
 
-        public override System.Uri LoginBackgroundLogo
+        private readonly Uri _loginLogo = new Uri("ms-appx:///Assets/salesforceLogo.png");
+        
+        public override Uri LoginBackgroundLogo
         {
-            get { return null; }
+            get { return _loginLogo; }
         }
 
         public override string ApplicationTitle
         {
-            get { return "Salesforce RestExplorer Sample"; }
+            get { return "Salesforce Sample Container"; }
         }
 
         /// <summary>

@@ -30,11 +30,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading;
 using System.Windows.Input;
-using Windows.Web.Http;
 using Newtonsoft.Json.Linq;
 using Salesforce.SDK.Auth;
 using Salesforce.SDK.Net;
 using Salesforce.SDK.Rest;
+using System.Net.Http;
 
 namespace Salesforce.Sample.RestExplorer.ViewModels
 {

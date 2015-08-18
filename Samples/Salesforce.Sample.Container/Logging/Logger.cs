@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2014, salesforce.com, inc.
+ * Copyright (c) 2015, salesforce.com, inc.
  * All rights reserved.
  * Redistribution and use of this software in source and binary forms, with or
  * without modification, are permitted provided that the following conditions
@@ -25,59 +25,25 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-using Windows.UI;
-using Salesforce.SDK.Settings;
+using Salesforce.SDK.Logging;
 using System;
+using System.Diagnostics;
 
-namespace Salesforce.Sample.RestExplorer.Shared
+namespace Salesforce.SDK.Hybrid.Logging
 {
-    public class Config : SalesforceConfig
+    sealed internal class Logger : ILoggingService
     {
-        /// <summary>
-        ///     In using this sample you should create a connected app, and replace the ClientId with an id from the generated app.
-        /// </summary>
-        public override string ClientId
+        public void Log(Exception exception, LoggingLevel loggingLevel)
         {
-            get { return "3MVG9Iu66FKeHhINkB1l7xt7kR8czFcCTUhgoA8Ol2Ltf1eYHOU4SqQRSEitYFDUpqRWcoQ2.dBv_a1Dyu5xa"; }
+            if (exception != null)
+            {
+                Log(exception.Message, loggingLevel);
+            }
         }
 
-        public override string CallbackUrl
+        public void Log(string message, LoggingLevel loggingLevel)
         {
-            get { return "testsfdc:///mobilesdk/detect/oauth/done"; }
-        }
-
-        public override string[] Scopes
-        {
-            get { return new[] {"api"}; }
-        }
-
-        public override Int32 LoginBackgroundColor
-        {
-            get { return ColorToInt32(Colors.DarkOrange); }
-        }
-
-        public override System.Uri LoginBackgroundLogo
-        {
-            get { return null; }
-        }
-
-        public override string ApplicationTitle
-        {
-            get { return "Salesforce RestExplorer Sample"; }
-        }
-
-        /// <summary>
-        /// Set this propeert to true if you want the Title to show up on start screen of the app.
-        /// </summary>
-        public override bool IsApplicationTitleVisible
-        {
-            get { return true; }
-        }
-
-        private static Int32 ColorToInt32(Color color)
-        {
-            return (Int32)((color.A << 24) | (color.R << 16) |
-                          (color.G << 8) | (color.B << 0));
+            Debug.WriteLine(String.Format("{0} - {1}", loggingLevel, message));
         }
     }
 }

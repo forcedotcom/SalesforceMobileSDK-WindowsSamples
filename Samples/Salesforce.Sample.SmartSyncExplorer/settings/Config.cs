@@ -25,45 +25,55 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+using System;
 using Windows.UI;
 using Salesforce.SDK.Settings;
-using System;
 
-namespace Salesforce.Sample.RestExplorer.Shared
+namespace Salesforce.Sample.NativeSmartStore.Settings
 {
-    public class Config : SalesforceConfig
+    /// <summary>
+    /// Implement this class to configure the settings for your application.  You can find instructions on how to create a connected app from the included website.
+    /// https://help.salesforce.com/apex/HTViewHelpDoc?id=connected_app_create.htm
+    /// </summary>
+    class Config : SalesforceConfig
     {
         /// <summary>
-        ///     In using this sample you should create a connected app, and replace the ClientId with an id from the generated app.
+        /// This should return the client id generated when you create a connected app through Salesforce.
         /// </summary>
         public override string ClientId
         {
             get { return "3MVG9Iu66FKeHhINkB1l7xt7kR8czFcCTUhgoA8Ol2Ltf1eYHOU4SqQRSEitYFDUpqRWcoQ2.dBv_a1Dyu5xa"; }
         }
 
+        /// <summary>
+        /// This should return the callback url generated when you create a connected app through Salesforce.
+        /// </summary>
         public override string CallbackUrl
         {
             get { return "testsfdc:///mobilesdk/detect/oauth/done"; }
         }
 
+        /// <summary>
+        /// Return the scopes that you wish to use in your app. Limit to what you actually need, try to refrain from listing all scopes.
+        /// </summary>
         public override string[] Scopes
         {
-            get { return new[] {"api"}; }
+            get { return new string[] { "api", "web" }; }
         }
 
         public override Int32 LoginBackgroundColor
         {
-            get { return ColorToInt32(Colors.DarkOrange); }
-        }
-
-        public override System.Uri LoginBackgroundLogo
-        {
-            get { return null; }
+            get { return ColorToInt32(Colors.DarkSeaGreen); }
         }
 
         public override string ApplicationTitle
         {
-            get { return "Salesforce RestExplorer Sample"; }
+            get { return "Native SmartSync Sample"; }
+        }
+
+        public override Uri LoginBackgroundLogo
+        {
+            get { return null; }
         }
 
         /// <summary>

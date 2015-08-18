@@ -15,6 +15,7 @@ Debug/
 ContainerBin/
 NuGet.Config
 NuGet.exe
+project.lock.json
 *.intermediate
 AccountManager/platforms/windows/build/windows80/bld/CordovaApp.Windows80.jsproj.FileListAbsolute.txt
 .nuget/NuGet.targets
