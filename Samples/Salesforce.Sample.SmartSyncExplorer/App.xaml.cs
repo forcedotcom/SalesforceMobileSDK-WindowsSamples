@@ -42,12 +42,12 @@ using Salesforce.Sample.NativeSmartStore.Settings;
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=402347&clcid=0x409
 
 namespace Salesforce.Sample.SmartSyncExplorer
-{
-    /// <summary>
-    /// Provides application-specific behavior to supplement the default Application class.
-    /// </summary>
-    sealed partial class App : SalesforceApplication
     {
+        /// <summary>
+    /// Provides application-specific behavior to supplement the default Application class.
+        /// </summary>
+    sealed partial class App : SalesforceApplication
+        {
         /// <summary>
         ///     Invoked when Navigation to a certain page fails
         /// </summary>
