@@ -2,14 +2,18 @@
 using Windows.UI.Xaml.Navigation;
 using Salesforce.Sample.Container.Settings;
 using Salesforce.SDK.Auth;
-using Salesforce.SDK.Source.Security;
-using Salesforce.SDK.Source.Settings;
+using Salesforce.SDK.Security;
+using Salesforce.SDK.Settings;
 using Salesforce.SDK.Strings;
 using Salesforce.SDK.App;
+using Salesforce.SDK.Core;
+using Salesforce.SDK.Logging;
+using Salesforce.SDK.Hybrid.Logging;
+using System.Threading.Tasks;
 
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=402347&clcid=0x409
 
-namespace Salesforce.Sample.Container
+namespace Salesforce.Sample.RestExplorer
 {
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.
@@ -38,10 +42,13 @@ namespace Salesforce.Sample.Container
             throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
         }
 
-        protected override async void InitializeConfig()
+        protected override Task InitializeConfig()
         {
-            var config = await SDKManager.InitializeConfigAsync<Config>(new EncryptionSettings(new HmacSHA256KeyGenerator()));
-            config.SaveConfig();
+            SDKServiceLocator.RegisterService<IEncryptionService, Encryptor>();
+            SDKServiceLocator.RegisterService<ILoggingService, Logger>();
+            Encryptor.init(new EncryptionSettings(new HmacSHA256KeyGenerator()));
+            var config = SDKManager.InitializeConfigAsync<Config>().Result;
+            return config.SaveConfigAsync();
         }
 
         protected override Type SetRootApplicationPage()
