@@ -1,15 +1,15 @@
 ﻿using System;
-using Windows.UI.Xaml.Navigation;
-using Salesforce.Sample.Container.Settings;
-using Salesforce.SDK.Auth;
-using Salesforce.SDK.Security;
-using Salesforce.SDK.Settings;
-using Salesforce.SDK.Strings;
-using Salesforce.SDK.App;
-using Salesforce.SDK.Core;
-using Salesforce.SDK.Logging;
-using Salesforce.SDK.Hybrid.Logging;
 using System.Threading.Tasks;
+using Windows.UI.Xaml.Navigation;
+using Salesforce.SDK.App;
+using Salesforce.SDK.Auth;
+using Salesforce.SDK.Core;
+using Salesforce.SDK.Hybrid.Logging;
+using Salesforce.SDK.Logging;
+using Salesforce.SDK.Security;
+using Salesforce.SDK.Strings;
+using Salesforce.Sample.RestExplorer.Shared;
+using Salesforce.Sample.RestExplorer.Store;
 
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=402347&clcid=0x409
 
