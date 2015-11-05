@@ -81,7 +81,7 @@ namespace Salesforce.Sample.Container
                         string startPage = GetPage(account) +
                                            "?display=touch&sid=" + account.AccessToken;
                       
-                        account = await OAuth2.RefreshAuthToken(account);
+                        account = await OAuth2.RefreshAuthTokenAsync(account);
                         oneView.Navigate(new Uri(startPage));
                     }
                     catch (OAuthException ex)

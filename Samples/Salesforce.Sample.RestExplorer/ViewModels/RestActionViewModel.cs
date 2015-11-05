@@ -179,11 +179,11 @@ namespace Salesforce.Sample.RestExplorer.ViewModels
         /// <param name="parameter"></param>
         public async void Execute(object parameter)
         {
-            RestClient rc = SDKManager.GlobalClientManager.GetRestClient();
+            RestClient rc = SDKManager.GlobalClientManager.GetRestClient() as RestClient;
             if (rc != null)
             {
                 RestRequest request = BuildRestRequest();
-                RestResponse response = await rc.SendAsync(request);
+                RestResponse response = await rc.SendAsync(request) as RestResponse;
                 _vm.ReturnedRestResponse = response;
             }
         }
