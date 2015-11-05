@@ -88,8 +88,8 @@ namespace Salesforce.Sample.NativeSmartStoreSample.Shared.Pages
         private async Task<bool> SendRequest(string soql, string obj)
         {
             RestRequest restRequest = RestRequest.GetRequestForQuery(ApiVersion, soql);
-            RestClient client = SDKManager.GlobalClientManager.GetRestClient();
-            RestResponse response = await client.SendAsync(restRequest);
+            RestClient client = SDKManager.GlobalClientManager.GetRestClient() as RestClient;
+            RestResponse response = await client.SendAsync(restRequest) as RestResponse;
             if (response.Success)
             {
                 var records = response.AsJObject.GetValue("records").ToObject<JArray>();
