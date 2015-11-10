@@ -26,3 +26,5 @@ AccountManager/platforms/windows/build/windows80/bld/ProjectArchitectures.txt
 AccountManager/platforms/windows/build/windows/bld/CordovaApp.Windows.jsproj.FileListAbsolute.txt
 AccountManager/platforms/windows/build/phone/bld/CordovaApp.Phone.jsproj.FileListAbsolute.txt
 *.Cache
+*.nuget.props
+*.nuget.targets
