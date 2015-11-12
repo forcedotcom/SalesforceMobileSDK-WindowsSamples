@@ -113,6 +113,8 @@
     <None Include="packages.config" />
     <None Include="project.json" />
     <None Include="Salesforce.Sample.RestExplorer_TemporaryKey.pfx" />
+    <PRIResource Include="Strings\es\MobileSDK.resw" />
+    <PRIResource Include="Strings\en\MobileSDK.resw" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\SmallLogo.png">

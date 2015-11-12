@@ -108,10 +108,10 @@ namespace Salesforce.Sample.SmartSyncExplorer.Shared.Pages
         }
 
 
-        private void DisplayProgressFlyout(string text)
+        private async void DisplayProgressFlyout(string text)
         {
             MessageContent.Text = text;
-            Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => MessageFlyout.ShowAt(TitleBlock));
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => MessageFlyout.ShowAt(TitleBlock));
         }
 
         public void ZoomIn()
