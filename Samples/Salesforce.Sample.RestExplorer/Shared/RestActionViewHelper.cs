@@ -102,6 +102,7 @@ namespace Salesforce.Sample.RestExplorer.Shared
                     names.Add("tbSosl");
                     break;
                 case RestAction.Manual:
+                    names.Add("tbApiVersion");
                     names.Add("tbRequestPath");
                     names.Add("tbRequestBody");
                     names.Add("tbRequestMethod");

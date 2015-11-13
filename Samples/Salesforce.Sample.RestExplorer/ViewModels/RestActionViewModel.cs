@@ -73,7 +73,7 @@ namespace Salesforce.Sample.RestExplorer.ViewModels
         {
             _properties = new Dictionary<string, string>
             {
-                {API_VERSION, "v30.0"},
+                {API_VERSION, "v34.0"},
                 {OBJECT_TYPE, "Account"},
                 {OBJECT_ID, "Id"},
                 {EXTERNAL_ID_FIELD, "ExternalIdField"},
@@ -82,10 +82,15 @@ namespace Salesforce.Sample.RestExplorer.ViewModels
                 {FIELDS, "{\"Name\":\"acme\"}"},
                 {SOQL, "SELECT Id,Name FROM Account"},
                 {SOSL, "FIND {acme*}"},
-                {REQUEST_PATH, "/services/data/v30.0/chatter/feeds/news/me"},
+                {REQUEST_PATH, "/services/data/v34.0/chatter/feeds/news/me"},
                 {REQUEST_BODY, "Body"},
                 {REQUEST_METHOD, "GET"},
             };
+        }
+
+        public RestActionViewModel(string objectType, string Id, string requestPath)
+        {
+
         }
 
         public SendRequestCommand SendRequest
@@ -236,7 +241,7 @@ namespace Salesforce.Sample.RestExplorer.ViewModels
 
         private RestRequest BuildManualRestReuqest()
         {
-            var restMethod = (HttpMethod) Enum.Parse(typeof (HttpMethod), _vm[RestActionViewModel.REQUEST_METHOD], true);
+            var restMethod = new HttpMethod(_vm[RestActionViewModel.REQUEST_METHOD]);
             return new RestRequest(restMethod, _vm[RestActionViewModel.REQUEST_PATH],
                 _vm[RestActionViewModel.REQUEST_BODY], ContentTypeValues.Json);
         }

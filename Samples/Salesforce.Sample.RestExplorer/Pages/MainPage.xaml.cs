@@ -25,15 +25,20 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Net.Http;
 using System.Threading;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 using Salesforce.Sample.RestExplorer.Shared;
 using Salesforce.Sample.RestExplorer.ViewModels;
 using Salesforce.SDK.Auth;
 using Salesforce.SDK.Native;
+using Salesforce.SDK.Net;
 using Salesforce.SDK.Rest;
 
 namespace Salesforce.Sample.RestExplorer.Store
@@ -58,7 +63,8 @@ namespace Salesforce.Sample.RestExplorer.Store
             _buttons = new[]
             {
                 btnSwitch, btnVersions, btnResources, btnDescribeGlobal, btnDescribe, btnMetadata, btnCreate, btnRetrieve,
-                btnUpdate, btnUpsert, btnDelete, btnQuery, btnSearch, btnManual, btnLogout
+                btnUpdate, btnUpsert, btnDelete, btnQuery, btnSearch, btnManual, btnLogout, btnOwnedFiles, btnFilesInGroups,
+                btnFilesSharedWithMe, btnFileShares
             };
 
             foreach (Button button in _buttons)
@@ -66,7 +72,7 @@ namespace Salesforce.Sample.RestExplorer.Store
                 button.Click += OnAnyButtonClicked;
             }
 
-            SwitchToRestAction(RestAction.Versions);
+            SwitchToRestAction(RestAction.Versions, string.Empty);
         }
 
         /// <summary>
@@ -93,7 +99,7 @@ namespace Salesforce.Sample.RestExplorer.Store
         private void OnAnyButtonClicked(object sender, RoutedEventArgs e)
         {
             var restAction = RestAction.Versions;
-
+            var path = string.Empty;
             switch (((Button) sender).Name)
             {
                 case "btnLogout":
@@ -141,8 +147,16 @@ namespace Salesforce.Sample.RestExplorer.Store
                 case "btnVersions":
                     restAction = RestAction.Versions;
                     break;
+                case "btnOwnedFiles":
+                    restAction = RestAction.Manual;
+                    path = "/services/data/v34.0/chatter/users/{0}/files";
+                    break;
+                case "btnFilesInGroups":
+                    restAction = RestAction.Manual;
+                    path = "/services/data/v34.0/chatter/users/{0}/files/filter/groups";
+                    break;
             }
-            SwitchToRestAction(restAction);
+            SwitchToRestAction(restAction, path);
         }
 
         private void OnSwitch()
@@ -154,12 +168,18 @@ namespace Salesforce.Sample.RestExplorer.Store
         ///     Helper method called when user select a Rest action
         /// </summary>
         /// <param name="restAction"></param>
-        private void SwitchToRestAction(RestAction restAction)
+        private void SwitchToRestAction(RestAction restAction, string path)
         {
             ShowResponse(null);
+            var requestPath = string.Empty;
             string restActionStr = restAction.ToString();
             _viewModel[RestActionViewModel.SELECTED_REST_ACTION] = restActionStr;
-
+            if (!String.IsNullOrWhiteSpace(path))
+            {
+                var account = AccountManager.GetAccount();
+                requestPath = String.Format(path, account.UserId);
+                _viewModel[RestActionViewModel.REQUEST_PATH] = requestPath;
+            }
             HashSet<string> names = RestActionViewHelper.GetNamesOfControlsToShow(restActionStr);
             foreach (TextBox tb in new[]
             {
@@ -169,7 +189,13 @@ namespace Salesforce.Sample.RestExplorer.Store
             })
             {
                 tb.Visibility = names.Contains(tb.Name) ? Visibility.Visible : Visibility.Collapsed;
+                tb.BorderThickness = new Thickness(0,0,0,0);
             }
+            if (!String.IsNullOrWhiteSpace(path))
+            {
+                tbRequestPath.Text = requestPath;
+            } 
+
         }
 
         /// <summary>
