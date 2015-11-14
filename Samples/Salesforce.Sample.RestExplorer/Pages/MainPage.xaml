@@ -38,7 +38,7 @@
                     <Button Name="btnOwnedFiles" Width="150" Foreground="White" Background="#0070d2" Margin="1,1,1,0">Owned Files</Button>
                     <Button Name="btnFilesInGroups" Width="150" Foreground="White" Background="#0070d2" Margin="1,1,1,0">Files In Groups</Button>
                     <Button Name="btnFilesSharedWithMe" Width="150" Foreground="White" Background="#0070d2" Margin="1,1,1,0">Files Shared</Button>
-        
+
                 </StackPanel>
                 <StackPanel Grid.Row="0" Grid.Column="1">
                     <Button Name="btnCreate" Width="150" Foreground="White" Background="#0070d2" Margin="1,1,1,0">Create</Button>
