@@ -9,7 +9,7 @@
     mc:Ignorable="d"
     DataContext="{StaticResource RestActionViewModel}">
 
-    <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition />
         </Grid.RowDefinitions>
@@ -18,8 +18,8 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Row="0" Grid.Column="0">
-            <Button Name="btnLogout" Width="300">Logout</Button>
-            <Button Name="btnSwitch" Width="300">Switch User</Button>
+            <Button Name="btnLogout" Width="300" Foreground="White" Background="#0070d2" Margin="1,1,1,0">Logout</Button>
+            <Button Name="btnSwitch" Width="300" Foreground="White" Background="#0070d2" Margin="1,1,1,0">Switch User</Button>
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition />
@@ -29,21 +29,25 @@
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Row="0" Grid.Column="0">
-                    <Button Name="btnVersions" Width="150">Versions</Button>
-                    <Button Name="btnResources" Width="150">Resources</Button>
-                    <Button Name="btnDescribeGlobal" Width="150">Describe Global</Button>
-                    <Button Name="btnMetadata" Width="150">Metadata</Button>
-                    <Button Name="btnDescribe" Width="150">Describe</Button>
-                    <Button Name="btnManual" Width="150">Manual</Button>
+                    <Button Name="btnVersions" Width="150" Foreground="White" Background="#0070d2" Margin="1,1,1,0">Versions</Button>
+                    <Button Name="btnResources" Width="150" Foreground="White" Background="#0070d2" Margin="1,1,1,0">Resources</Button>
+                    <Button Name="btnDescribeGlobal" Width="150" Foreground="White" Background="#0070d2" Margin="1,1,1,0">Describe Global</Button>
+                    <Button Name="btnMetadata" Width="150" Foreground="White" Background="#0070d2" Margin="1,1,1,0">Metadata</Button>
+                    <Button Name="btnDescribe" Width="150" Foreground="White" Background="#0070d2" Margin="1,1,1,0">Describe</Button>
+                    <Button Name="btnManual" Width="150" Foreground="White" Background="#0070d2" Margin="1,1,1,0">Manual</Button>
+                    <Button Name="btnOwnedFiles" Width="150" Foreground="White" Background="#0070d2" Margin="1,1,1,0">Owned Files</Button>
+                    <Button Name="btnFilesInGroups" Width="150" Foreground="White" Background="#0070d2" Margin="1,1,1,0">Files In Groups</Button>
+                    <Button Name="btnFilesSharedWithMe" Width="150" Foreground="White" Background="#0070d2" Margin="1,1,1,0">Files Shared</Button>
+
                 </StackPanel>
                 <StackPanel Grid.Row="0" Grid.Column="1">
-                    <Button Name="btnCreate" Width="150">Create</Button>
-                    <Button Name="btnRetrieve" Width="150">Retrieve</Button>
-                    <Button Name="btnUpdate" Width="150">Update</Button>
-                    <Button Name="btnUpsert" Width="150">Upsert</Button>
-                    <Button Name="btnDelete" Width="150">Delete</Button>
-                    <Button Name="btnQuery" Width="150">Query</Button>
-                    <Button Name="btnSearch" Width="150">Search</Button>
+                    <Button Name="btnCreate" Width="150" Foreground="White" Background="#0070d2" Margin="1,1,1,0">Create</Button>
+                    <Button Name="btnRetrieve" Width="150" Foreground="White" Background="#0070d2" Margin="1,1,1,0">Retrieve</Button>
+                    <Button Name="btnUpdate" Width="150" Foreground="White" Background="#0070d2" Margin="1,1,1,0">Update</Button>
+                    <Button Name="btnUpsert" Width="150" Foreground="White" Background="#0070d2" Margin="1,1,1,0">Upsert</Button>
+                    <Button Name="btnDelete" Width="150" Foreground="White" Background="#0070d2" Margin="1,1,1,0">Delete</Button>
+                    <Button Name="btnQuery" Width="150" Foreground="White" Background="#0070d2" Margin="1,1,1,0">Query</Button>
+                    <Button Name="btnSearch" Width="150" Foreground="White" Background="#0070d2" Margin="1,1,1,0">Search</Button>
                 </StackPanel>
             </Grid>
         </StackPanel>
@@ -82,8 +86,8 @@
                 <TextBox Style="{StaticResource TextBoxStyle}" Visibility="Collapsed" Name="tbRequestMethod"
                          Text="{Binding [RequestMethod], Mode=TwoWay}" />
             </StackPanel>
-            <Button Name="btnAction" Grid.Row="1" Grid.Column="0" Command="{Binding SendRequest}">Send Request</Button>
-            <WebView Name="wbResult" Grid.Row="2" Grid.Column="0" />
+            <Button Name="btnAction" Grid.Row="1" Grid.Column="0" Command="{Binding SendRequest}" Foreground="White" Background="#0070d2" Margin="1,1,1,0">Send Request</Button>
+            <WebView Name="wbResult" Grid.Row="2" Grid.Column="0" Margin="0,1,1,1"/>
         </Grid>
     </Grid>
 </app:NativeMainPage>
