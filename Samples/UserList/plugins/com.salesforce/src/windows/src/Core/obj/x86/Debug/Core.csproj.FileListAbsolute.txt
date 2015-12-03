@@ -1,0 +1,17 @@
+C:\repo\samples-fork\Samples\UserList\plugins\com.salesforce\src\windows\src\Core\bin\x86\Debug\Resources\servers.xml
+C:\repo\samples-fork\Samples\UserList\plugins\com.salesforce\src\windows\src\Core\bin\x86\Debug\Salesforce.SDK.Core.dll
+C:\repo\samples-fork\Samples\UserList\plugins\com.salesforce\src\windows\src\Core\bin\x86\Debug\Salesforce.SDK.Core.pdb
+C:\repo\samples-fork\Samples\UserList\plugins\com.salesforce\src\windows\src\Core\bin\x86\Debug\GalaSoft.MvvmLight.dll
+C:\repo\samples-fork\Samples\UserList\plugins\com.salesforce\src\windows\src\Core\bin\x86\Debug\GalaSoft.MvvmLight.Extras.dll
+C:\repo\samples-fork\Samples\UserList\plugins\com.salesforce\src\windows\src\Core\bin\x86\Debug\Microsoft.Practices.ServiceLocation.dll
+C:\repo\samples-fork\Samples\UserList\plugins\com.salesforce\src\windows\src\Core\bin\x86\Debug\Newtonsoft.Json.dll
+C:\repo\samples-fork\Samples\UserList\plugins\com.salesforce\src\windows\src\Core\bin\x86\Debug\GalaSoft.MvvmLight.pdb
+C:\repo\samples-fork\Samples\UserList\plugins\com.salesforce\src\windows\src\Core\bin\x86\Debug\GalaSoft.MvvmLight.xml
+C:\repo\samples-fork\Samples\UserList\plugins\com.salesforce\src\windows\src\Core\bin\x86\Debug\GalaSoft.MvvmLight.Extras.pdb
+C:\repo\samples-fork\Samples\UserList\plugins\com.salesforce\src\windows\src\Core\bin\x86\Debug\GalaSoft.MvvmLight.Extras.xml
+C:\repo\samples-fork\Samples\UserList\plugins\com.salesforce\src\windows\src\Core\bin\x86\Debug\Microsoft.Practices.ServiceLocation.pdb
+C:\repo\samples-fork\Samples\UserList\plugins\com.salesforce\src\windows\src\Core\bin\x86\Debug\Microsoft.Practices.ServiceLocation.xml
+C:\repo\samples-fork\Samples\UserList\plugins\com.salesforce\src\windows\src\Core\bin\x86\Debug\Newtonsoft.Json.xml
+C:\repo\samples-fork\Samples\UserList\plugins\com.salesforce\src\windows\src\Core\obj\x86\Debug\Core.csprojResolveAssemblyReference.cache
+C:\repo\samples-fork\Samples\UserList\plugins\com.salesforce\src\windows\src\Core\obj\x86\Debug\Salesforce.SDK.Core.dll
+C:\repo\samples-fork\Samples\UserList\plugins\com.salesforce\src\windows\src\Core\obj\x86\Debug\Salesforce.SDK.Core.pdb

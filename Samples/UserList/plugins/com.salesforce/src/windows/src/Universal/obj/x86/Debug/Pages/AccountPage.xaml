@@ -1,0 +1,272 @@
+﻿<Page
+    x:Class="Salesforce.SDK.Pages.AccountPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:strings="using:Salesforce.SDK.Strings"
+    xmlns:native="using:Salesforce.SDK.Native"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <UserControl.Resources>
+        <strings:LocalizedStrings x:Key="Localize" />
+
+        <Flyout x:ConnectionId='1' x:Name="ServerFlyout" Placement="Bottom" AutomationProperties.AutomationId="Flyout_ServerFlyout">
+            <StackPanel x:ConnectionId='15' Width="400" x:Name="ServerFlyoutPanel" Background="Transparent">
+                <TextBlock x:ConnectionId='16' x:Name="ServerFlyoutLabel"
+                           DataContext="choose_connection"
+                           Text="{Binding Converter={StaticResource Localize}}"
+                           Margin="5 0 5 25"
+                           Style="{StaticResource SubheaderTextBlockStyle}"
+                           TextAlignment="Center" 
+                           AutomationProperties.AutomationId="TextBlock_ServerFlyout_Label"/>
+
+                <ListBox x:ConnectionId='17' x:Name="ListboxServers"
+                         SelectionMode="Single"
+                         Margin="5 0 5 25"
+                         AutomationProperties.AutomationId="ListBox_ServerFlyout_ServerList">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <native:ServerControl x:ConnectionId='19'                                          />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Center"
+                            Width="Auto">
+                    <Button x:ConnectionId='18' x:Name="AddConnection"
+                            DataContext="add_connection"
+                            Content="{Binding Converter={StaticResource Localize}}"
+                            Margin="10 0 10 0"
+                            Width="Auto"
+                                                       
+                            HorizontalAlignment="Center" 
+                            AutomationProperties.AutomationId="Button_ServerFlyout_AddConnection"/>
+                </StackPanel>
+
+            </StackPanel>
+        </Flyout>
+
+        <Flyout x:ConnectionId='2' x:Name="AddServerFlyout"
+                Placement="Bottom"
+                AutomationProperties.AutomationId="Flyout_AddServer">
+            <StackPanel x:ConnectionId='7' Width="400" x:Name="AddServerFlyoutPanel" Background="Transparent">
+                <TextBlock x:ConnectionId='8' x:Name="AddServerFlyoutLabel"
+                           DataContext="new_connection"
+                           Text="{Binding Converter={StaticResource Localize}}"
+                           Grid.Row="1"
+                           Margin="5 0 5 15"
+                           Style="{StaticResource SubheaderTextBlockStyle}"
+                           TextAlignment="Center" 
+                           AutomationProperties.AutomationId="TextBlock_AddServerFlyout_Label"/>
+                <StackPanel Margin="5 0 5 15">
+                    <TextBlock x:ConnectionId='11' Name="lbl_HostAddress"
+                               DataContext="address_label"
+                               Text="{Binding Converter={StaticResource Localize}}"
+                               Foreground="DimGray"
+                               Margin="10 0 0 0"
+                               AutomationProperties.AutomationId="TextBlock_AddServerFlyout_AddressLabel"/>
+                    <TextBox x:ConnectionId='12' x:Name="HostAddress"
+                             MaxLength="2048"
+                             InputScope="Url"
+                             HorizontalAlignment="Stretch"
+                             AutomationProperties.LabeledBy="{Binding ElementName=lbl_HostAddress}"
+                             AutomationProperties.AutomationId="TextBox_AddServerFlyout_Address">
+                    </TextBox>
+                    <TextBlock x:ConnectionId='13' Name="lbl_HostName"
+                               DataContext="host_label"
+                               Text="{Binding Converter={StaticResource Localize}}"
+                               Foreground="DimGray"
+                               Margin="10 0 0 0"
+                               AutomationProperties.AutomationId="TextBlock_AddServerFlyout_HostNameLabel"/>
+                    <TextBox x:ConnectionId='14' x:Name="HostName"
+                             MaxLength="2048"
+                             HorizontalAlignment="Stretch"
+                             AutomationProperties.LabeledBy="{Binding ElementName=lbl_HostName}"
+                             AutomationProperties.AutomationId="TextBlock_AddServerFlyout_HostName">            
+                    </TextBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Width="Auto">
+                    <Button x:ConnectionId='9' x:Name="AddCustomHostBtn"
+                            DataContext="add"
+                            Content="{Binding Converter={StaticResource Localize}}"
+                            Margin="10 0 10 0"
+                            Width="Auto"
+                                                          
+                            HorizontalAlignment="Center" 
+                            AutomationProperties.AutomationId="Button_AddServerFlyout_Add"/>
+                    <Button x:ConnectionId='10' x:Name="CancelCustomHostBtn"
+                            DataContext="cancel"
+                            Content="{Binding Converter={StaticResource Localize}}"
+                            Margin="10 0 10 0"
+                            Width="Auto"
+                                                             
+                            HorizontalAlignment="Center" 
+                            AutomationProperties.AutomationId="Button_AddServerFlyout_Cancel"/>
+                </StackPanel>
+            </StackPanel>
+        </Flyout>
+
+        <Flyout x:ConnectionId='3' x:Name="MessageFlyout"
+                Placement="Bottom"
+                AutomationProperties.AutomationId="Flyout_Message">
+            <StackPanel x:ConnectionId='4' x:Name="MessageFlyoutPanel" Background="Transparent">
+                <TextBlock x:ConnectionId='5' x:Name="MessageContent"
+                           Grid.Row="1"
+                           Margin="5 0 5 15"
+                           HorizontalAlignment="Stretch"
+                           TextWrapping="Wrap"
+                           Style="{StaticResource TitleTextBlockStyle}"
+                           TextAlignment="Center" 
+                           AutomationProperties.AutomationId="TextBlock_MessageFlyout_MessageContent"/>
+                <Button x:ConnectionId='6' x:Name="CloseMessageButton"
+                            DataContext="ok"
+                            Content="{Binding Converter={StaticResource Localize}}"
+                            Margin="10 0 10 0"
+                                                              
+                            HorizontalAlignment="Center" 
+                            AutomationProperties.AutomationId="Button_MessageFlyout_Ok"/>
+            </StackPanel>
+        </Flyout>
+    </UserControl.Resources>
+
+    <Grid x:ConnectionId='20' Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" x:Name="PageRoot">
+        <StackPanel x:ConnectionId='21' Background="Transparent" x:Name="Container" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBlock x:ConnectionId='22' x:Name="ApplicationTitle"
+                   DataContext="application_title"
+                   Text="{Binding Converter={StaticResource Localize}}"
+                   Grid.Row="0"
+                   HorizontalAlignment="Center"
+                   Margin="5 0 5 20"
+                   Style="{StaticResource HeaderTextBlockStyle}" 
+                   AutomationProperties.AutomationId="TextBlock_ApplicationTitle"/>
+            <ItemsControl x:ConnectionId='23' x:Name="ApplicationLogo" HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="400">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Image Source="{Binding}" AutomationProperties.Name="{Binding Text, ElementName=ApplicationTitle}" AutomationProperties.AutomationId="Image_ApplicationLogo"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <Grid x:ConnectionId='24' Background="Transparent" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="MultiUserGrid"  Visibility="Collapsed">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <TextBlock x:ConnectionId='28' x:Name="ListTitle"
+                   DataContext="select_account"
+                   Text="{Binding Converter={StaticResource Localize}}"
+                   Grid.Row="0"
+                   HorizontalAlignment="Center"
+                   Margin="5 0 5 20"
+                   Style="{StaticResource SubheaderTextBlockStyle}" 
+                   AutomationProperties.AutomationId="TextBlock_SelectAccount_ListTitle"/>
+
+                <ListBox x:ConnectionId='29' Grid.Row="1" x:Name="AccountsList"
+                 SelectedValuePath="{Binding Account}"
+                 HorizontalAlignment="Center"
+                 Width="400"
+                 SelectionMode="Single" 
+                 AutomationProperties.AutomationId="ListBox_SelectAccount_AccountList"/>
+
+            </Grid>
+            <Grid x:ConnectionId='25' Background="Transparent" x:Name="SingleUserGrid">
+                <StackPanel HorizontalAlignment="Center" Width="Auto">
+                    <Button x:ConnectionId='26' x:Name="LoginToSalesforce"
+                            DataContext="login_to_salesforce"
+                            Content="{Binding Converter={StaticResource Localize}}"
+                            Margin="10 0 10 0"
+                                                             
+                            HorizontalAlignment="Center" 
+                            AutomationProperties.AutomationId="Button_Login_LoginSalesforce"/>
+                    <Button x:ConnectionId='27' x:Name="ChooseConnection"
+                            DataContext="choose_connection"
+                            Content="{Binding Converter={StaticResource Localize}}"
+                            Margin="10 0 10 0"
+                                                    
+                            Width="{Binding ElementName=LoginToSalesforce, Path=ActualWidth}"
+                            HorizontalAlignment="Center"
+                            AutomationProperties.AutomationId="Button_Login_ChooseConnection"/>
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:ConnectionId='30' x:Name="LoginView">
+                <VisualState x:ConnectionId='31' x:Name="SingleUser">
+                    <Storyboard>
+
+                        <ObjectAnimationUsingKeyFrames
+                    Storyboard.TargetName="MultiUserGrid"
+                    Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed" />
+                        </ObjectAnimationUsingKeyFrames>
+
+                        <ObjectAnimationUsingKeyFrames
+                    Storyboard.TargetName="SingleUserGrid"
+                    Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Visible" />
+                        </ObjectAnimationUsingKeyFrames>
+                        
+                    </Storyboard>
+                </VisualState>
+                <VisualState x:ConnectionId='32' x:Name="MultipleUser">
+                    <Storyboard>
+
+                        <ObjectAnimationUsingKeyFrames
+                    Storyboard.TargetName="SingleUserGrid"
+                    Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed" />
+                        </ObjectAnimationUsingKeyFrames>
+
+                        <ObjectAnimationUsingKeyFrames
+                    Storyboard.TargetName="MultiUserGrid"
+                    Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Visible" />
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+
+                <VisualState x:ConnectionId='33' x:Name="LoggingUserIn">
+                    <Storyboard>
+
+                        <ObjectAnimationUsingKeyFrames
+                    Storyboard.TargetName="SingleUserGrid"
+                    Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed" />
+                        </ObjectAnimationUsingKeyFrames>
+
+                        <ObjectAnimationUsingKeyFrames
+                    Storyboard.TargetName="MultiUserGrid"
+                    Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed" />
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+    </Grid>
+
+    <Page.BottomAppBar>
+        <CommandBar x:ConnectionId='34' x:Name="LoginBar" IsSticky="True" IsOpen="True" AutomationProperties.AutomationId="CommandBar_LoginBar">
+            <AppBarButton x:ConnectionId='35' x:Name="AppBarAddAccount"
+                          DataContext="account"
+                          Label="{Binding Converter={StaticResource Localize}}"
+                          Icon="Add"
+                          HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center" 
+                          AutomationProperties.AutomationId="AppBarButton_LoginBar_Add"/>
+        </CommandBar>
+    </Page.BottomAppBar>
+</Page>
+
