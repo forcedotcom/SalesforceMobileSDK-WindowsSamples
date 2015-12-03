@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+        <HasSharedItems>true</HasSharedItems>
+        <SharedGUID>9ebdb27f-d75b-4d8c-b53f-7be4a1fe89f9</SharedGUID>
+    </PropertyGroup>
+    <ItemGroup>
+        <Content Include="$(MSBuildThisFileDirectory)www\**" />
+        <Content Include="$(MSBuildThisFileDirectory)www\css\ratchet-theme-android.css" />
+        <Content Include="$(MSBuildThisFileDirectory)www\css\ratchet-theme-android.min.css" />
+        <Content Include="$(MSBuildThisFileDirectory)www\css\ratchet-theme-ios.css" />
+        <Content Include="$(MSBuildThisFileDirectory)www\css\ratchet-theme-ios.min.css" />
+        <Content Include="$(MSBuildThisFileDirectory)www\css\ratchet.css" />
+        <Content Include="$(MSBuildThisFileDirectory)www\css\ratchet.min.css" />
+        <Content Include="$(MSBuildThisFileDirectory)www\css\ratchet.modified.css" />
+        <Content Include="$(MSBuildThisFileDirectory)www\js\app.js" />
+        <Content Include="$(MSBuildThisFileDirectory)www\js\forcetk.mobilesdk.js" />
+        <Content Include="$(MSBuildThisFileDirectory)www\js\jquery.js" />
+        <Content Include="$(MSBuildThisFileDirectory)www\scripts\platformOverrides.js" />
+    </ItemGroup>
+    <ItemGroup>
+        <Content Include="$(MSBuildThisFileDirectory)config.xml" />
+    </ItemGroup>
+    <Import Condition="Exists('$(MSBuildThisFileDirectory)CordovaAppDebug.projitems') And '$(Configuration)'=='Debug'" Project="CordovaAppDebug.projitems" />
+    <Import Condition="Exists('$(MSBuildThisFileDirectory)CordovaAppRelease.projitems') And '$(Configuration)'!='Debug'" Project="CordovaAppRelease.projitems" />
+    <ItemGroup>
+        <ProjectReference Include="C:\repo\samples-fork\Samples\UserList\plugins\com.salesforce\src\windows\src\Core\Core.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="C:\repo\samples-fork\Samples\UserList\plugins\com.salesforce\src\windows\src\Universal\Universal.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="C:\repo\samples-fork\Samples\UserList\plugins\com.salesforce\src\windows\src\Hybrid\Hybrid.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <Reference Include="Newtonsoft.Json">
+            <HintPath>plugins\com.salesforce\Newtonsoft.Json.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+    <ItemGroup>
+        <Reference Include="Galasoft.MvvmLight">
+            <HintPath>plugins\com.salesforce\Galasoft.MvvmLight.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+    <ItemGroup>
+        <Reference Include="Galasoft.MvvmLight.Extras">
+            <HintPath>plugins\com.salesforce\Galasoft.MvvmLight.Extras.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+</Project>
