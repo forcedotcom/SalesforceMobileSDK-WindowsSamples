@@ -2,10 +2,10 @@
 <widget id="com.salesforce.userlist" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>UserList</name>
     <description>
-        A sample Apache Cordova application that responds to the deviceready event.
+      A sample Cordova application that pulls a list of Users from your Salesforce org.
     </description>
     <author email="dev@cordova.apache.org" href="http://cordova.io">
-        Apache Cordova Team
+      Salesforce
     </author>
     <content src="index.html" />
     <access origin="*" />
