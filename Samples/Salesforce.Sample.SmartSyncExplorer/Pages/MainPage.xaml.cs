@@ -38,6 +38,7 @@ using Salesforce.SDK.Auth;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 using Salesforce.SDK.Native;
+using Salesforce.SDK.SmartStore.Store;
 
 namespace Salesforce.Sample.SmartSyncExplorer.Shared.Pages
 {
@@ -99,15 +100,18 @@ namespace Salesforce.Sample.SmartSyncExplorer.Shared.Pages
 
         private async void Logout(object sender, RoutedEventArgs e)
         {
-            ContactsDataModel.ClearSmartStore();
-            if (SDKManager.GlobalClientManager != null)
+            var store = SmartStore.GetSmartStore(AccountManager.GetAccount());
+            if (store == null)
             {
-                await SDKManager.GlobalClientManager.Logout();
+                ContactsDataModel.ClearSmartStore();
+                if (SDKManager.GlobalClientManager != null)
+                {
+                    await SDKManager.GlobalClientManager.LogoutAsync();
+                }
+                AccountManager.SwitchAccount();                
             }
-            AccountManager.SwitchAccount();
+            await store.LogoutAsync();
         }
-
-
         private async void DisplayProgressFlyout(string text)
         {
             MessageContent.Text = text;
