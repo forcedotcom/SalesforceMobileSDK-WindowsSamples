@@ -30,6 +30,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Net.Http;
 using System.Threading;
+using System.Threading.Tasks;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -37,6 +38,8 @@ using Windows.UI.Xaml.Media;
 using Salesforce.Sample.RestExplorer.Shared;
 using Salesforce.Sample.RestExplorer.ViewModels;
 using Salesforce.SDK.Auth;
+using Salesforce.SDK.Core;
+using Salesforce.SDK.Logging;
 using Salesforce.SDK.Native;
 using Salesforce.SDK.Net;
 using Salesforce.SDK.Rest;
@@ -46,7 +49,7 @@ namespace Salesforce.Sample.RestExplorer.Store
     /// <summary>
     ///     Only page of the Rest Explorer Store application
     /// </summary>
-    public sealed partial class MainPage : NativeMainPage
+    public sealed partial class MainPage : Page
     {
         private readonly RestActionViewModel _viewModel;
         private Button[] _buttons;
@@ -69,7 +72,7 @@ namespace Salesforce.Sample.RestExplorer.Store
 
             foreach (Button button in _buttons)
             {
-                button.Click += OnAnyButtonClicked;
+                button.Click += OnAnyButtonClickedAsync;
             }
 
             SwitchToRestAction(RestAction.Versions, string.Empty);
@@ -96,14 +99,14 @@ namespace Salesforce.Sample.RestExplorer.Store
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OnAnyButtonClicked(object sender, RoutedEventArgs e)
+        private async void OnAnyButtonClickedAsync(object sender, RoutedEventArgs e)
         {
             var restAction = RestAction.Versions;
             var path = string.Empty;
             switch (((Button) sender).Name)
             {
                 case "btnLogout":
-                    OnLogout();
+                    await OnLogoutAsync();
                     return;
                 case "btnSwitch":
                     OnSwitch();
@@ -166,6 +169,24 @@ namespace Salesforce.Sample.RestExplorer.Store
         private void OnSwitch()
         {
             AccountManager.SwitchAccount();
+        }
+
+        private async Task OnLogoutAsync()
+        {
+            await SDKManager.GlobalClientManager.LogoutAsync();
+
+            await CheckIfLoginNeededAsync();
+        }
+
+        private async Task CheckIfLoginNeededAsync()
+        {
+            var account = AccountManager.GetAccount();
+            if (account == null)
+            {
+                SDKServiceLocator.Get<ILoggingService>().Log("Account object is null, calling StartLoginFlowAsync",
+                                                          LoggingLevel.Verbose);
+                await SDKServiceLocator.Get<IAuthHelper>().StartLoginFlowAsync();
+            }
         }
 
         /// <summary>
