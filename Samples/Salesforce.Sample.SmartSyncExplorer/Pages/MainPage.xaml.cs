@@ -45,7 +45,7 @@ namespace Salesforce.Sample.SmartSyncExplorer.Shared.Pages
     /// <summary>
     ///     An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MainPage : NativeMainPage
+    public sealed partial class MainPage : Page
     {
         public MainPage()
         {

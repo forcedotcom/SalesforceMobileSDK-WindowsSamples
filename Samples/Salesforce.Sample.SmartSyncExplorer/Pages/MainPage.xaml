@@ -1,4 +1,4 @@
-﻿<native:NativeMainPage
+﻿<Page
     x:Class="Salesforce.Sample.SmartSyncExplorer.Shared.Pages.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -122,4 +122,4 @@
             </CommandBar.SecondaryCommands>
         </CommandBar>
     </Page.BottomAppBar>
-</native:NativeMainPage>
+</Page>
