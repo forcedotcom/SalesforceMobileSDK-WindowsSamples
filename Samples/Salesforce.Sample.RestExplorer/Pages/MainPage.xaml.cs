@@ -72,7 +72,7 @@ namespace Salesforce.Sample.RestExplorer.Store
 
             foreach (Button button in _buttons)
             {
-                button.Click += OnAnyButtonClicked;
+                button.Click += OnAnyButtonClickedAsync;
             }
 
             SwitchToRestAction(RestAction.Versions, string.Empty);
@@ -99,14 +99,14 @@ namespace Salesforce.Sample.RestExplorer.Store
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async Task OnAnyButtonClicked(object sender, RoutedEventArgs e)
+        private async void OnAnyButtonClickedAsync(object sender, RoutedEventArgs e)
         {
             var restAction = RestAction.Versions;
             var path = string.Empty;
             switch (((Button) sender).Name)
             {
                 case "btnLogout":
-                    await OnLogout();
+                    await OnLogoutAsync();
                     return;
                 case "btnSwitch":
                     OnSwitch();
@@ -171,7 +171,7 @@ namespace Salesforce.Sample.RestExplorer.Store
             AccountManager.SwitchAccount();
         }
 
-        private async Task OnLogout()
+        private async Task OnLogoutAsync()
         {
             await SDKManager.GlobalClientManager.LogoutAsync();
 
