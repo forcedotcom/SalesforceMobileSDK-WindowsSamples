@@ -98,6 +98,11 @@
     <Content Include="typescript\salesforce.windows.smartsync.js" />
     <Content Include="typescript\salesforce.windows.smartsync.js.map" />
     <Content Include="typescript\salesforce.windows.smartsync.ts" />
+    <Content Include="typings\Salesforce.SDK.Hybrid.d.ts" />
+    <Content Include="typings\Salesforce.SDK.Hybrid.SmartStore.d.ts" />
+    <Content Include="typings\Salesforce.SDK.Hybrid.SmartSync.d.ts" />
+    <Content Include="typings\winjs-3.0.d.ts" />
+    <Content Include="typings\winrt.d.ts" />
     <None Include="Salesforce.Sample.SmartSyncExplorerHybrid_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>

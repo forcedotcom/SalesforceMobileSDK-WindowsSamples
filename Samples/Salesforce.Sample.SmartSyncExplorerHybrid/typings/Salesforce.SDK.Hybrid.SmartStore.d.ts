@@ -48,6 +48,7 @@ declare module Salesforce.SDK.Hybrid.SmartStore {
         constructor(path: string, type: Salesforce.SDK.Hybrid.SmartStore.SmartStoreType, columnName: string);
         static mapForIndexSpecs(indexSpecs: Salesforce.SDK.Hybrid.SmartStore.IndexSpec[]): Windows.Foundation.Collections.IMap<string,Salesforce.SDK.Hybrid.SmartStore.IndexSpec>;
         toString(): string;
+        jsonToIndexSpecCollection(json: string): Salesforce.SDK.Hybrid.SmartStore.IndexSpec[]; 
     }
 
     export interface IQuerySpecClass {
