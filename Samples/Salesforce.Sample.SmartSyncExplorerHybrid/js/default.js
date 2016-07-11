@@ -272,7 +272,7 @@
             var fieldlist = ["FirstName", "LastName", "Title", "HomePhone", "Email", "Department"];
             var mergemodeoptions = Salesforce.SDK.Hybrid.SmartSync.Models.MergeModeOptions;
             var options = Salesforce.SDK.Hybrid.SmartSync.Models.SyncOptions.optionsForSyncUp(fieldlist, mergemodeoptions.leaveIfChanged);
-            var target = new Salesforce.SDK.Hybrid.SmartSync.Models.SyncUpTarget;
+            var target = new Salesforce.SDK.Hybrid.SmartSync.Models.SyncUpTarget();
             var args = [false, target, options, "contacts"];
             smartSync.syncUp(function success(result) {
                 syncState = result;

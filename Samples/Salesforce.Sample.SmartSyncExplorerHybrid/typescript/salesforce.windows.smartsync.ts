@@ -60,9 +60,8 @@ module SmartSyncJS {
                 fail("Error in getting instance for SmartSync");
             }
             else {
-                syncmanager.syncDown(payload.target.asJson(), payload.soupName, success("Accounts Synced Down"), payload.options);
-                success("Complete sync down");
-
+                var syncState = syncmanager.syncDown(payload.target.asJson(), payload.soupName, null, payload.options);
+                success(syncState);
             }
         }
 
@@ -82,14 +81,12 @@ module SmartSyncJS {
 
         public syncUp(success, fail, args) {
             if (this.checkFirstArg(args)) return;
-            //var payload = args[1];
             var syncmanager = this.getInstance();
             if (!syncmanager) {
                 fail("Error in getting instance for SmartSync");
             }
             else {
-                var syncState = syncmanager.syncUp(args[1], args[2], args[3], success("Accounts Synced Up Successfully"));
-                //syncmanager.syncUp(payload.target, payload.soupName, payload.options, success("Accounts Synced Up Successfully"));
+                var syncState = syncmanager.syncUp(args[1], args[2], args[3], null);
                 success(syncState);
             }
         }
