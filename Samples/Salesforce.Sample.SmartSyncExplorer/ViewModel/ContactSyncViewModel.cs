@@ -263,7 +263,7 @@ namespace Salesforce.Sample.SmartSyncExplorer.ViewModel
         private void HandleSyncUpdate(SyncState sync)
         {
             if (SyncState.SyncStatusTypes.Done != sync.Status) return;
-            switch (sync.SyncType)
+            switch (sync.Type)
             {
                 case SyncState.SyncTypes.SyncUp:
                     RemoveDeleted();

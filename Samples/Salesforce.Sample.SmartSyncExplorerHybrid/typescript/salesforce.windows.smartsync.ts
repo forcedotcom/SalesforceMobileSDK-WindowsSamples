@@ -31,84 +31,76 @@
 module SmartSyncJS {
 
     export class SmartSync {
+
         constructor() { }
 
-        private manager = Salesforce.SDK.Hybrid.SmartSync;
+        private smartSync = Salesforce.SDK.Hybrid.SmartSync;
 
-         // Helper function to handle calls that don't specify isGlobalStore as first argument
-         // If missing, the caller is re-invoked with false prepended to the arguments list and true is returned
-         // Otherwise, false is returned
-         public checkFirstArg(argumentsOfCaller) {
-            // Turning arguments into array
+        private checkFirstArg(argumentsOfCaller) {
             var args = Array.prototype.slice.call(argumentsOfCaller);
-            // If first argument is not a boolean
             if (typeof (args[0]) !== "boolean") {
-                // Pre-pending false
                 args.unshift(false);
-                // Re-invoking function
                 argumentsOfCaller.callee.apply(null, args);
                 return true;
             }
-            // First argument is a boolean
             else {
                 return false;
             }
         }
 
-        public getInstance() {
-            var syncmanager = this.manager.SyncManager.getInstance();
-            return syncmanager;
+        private getInstance() {
+            return this.smartSync.SyncManager.getInstance();
         }
 
-        public syncDown(successCB, errorCB, args) {
-            if (this.checkFirstArg(arguments)) return;
+        public syncDown(success, fail, args) {
+            if (this.checkFirstArg(args)) return;
             var payload = args[1];
-            var syncmanager = this.manager.SyncManager.getInstance(payload.account, null);
+            var syncmanager = this.getInstance();
             if (!syncmanager) {
-                errorCB("Error in getting instance for SmartSync");
+                fail("Error in getting instance for SmartSync");
             }
             else {
-                syncmanager.syncDown(payload.target.asJson(), payload.soupName, successCB("Accounts Synced Down"), payload.options);
-
-            }
-
-        }
-
-        public reSync(successCB, errorCB, args) {
-            if (this.checkFirstArg(arguments)) return;
-            var payload = args[1];
-            var syncmanager = this.manager.SyncManager.getInstance();
-            if (!syncmanager) {
-                errorCB("Error in getting instance for SmartSync");
-            }
-            else {
-                syncmanager.reSync(payload.syncId, successCB("Resync Successful"));
-
+                var syncState = syncmanager.syncDown(payload.target.asJson(), payload.soupName, null, payload.options);
+                success(syncState);
             }
         }
 
-        public syncUp(successCB, errorCB, args) {
-            if (this.checkFirstArg(arguments)) return;
+        public reSync(success, fail, args) {
+            if (this.checkFirstArg(args)) return;
             var payload = args[1];
-            var syncmanager = this.manager.SyncManager.getInstance();
+            var syncmanager = this.getInstance();
             if (!syncmanager) {
-                errorCB("Error in getting instance for SmartSync");
+                fail("Error in getting instance for SmartSync");
             }
             else {
-                syncmanager.syncUp(payload.target, payload.soupName, payload.options, successCB("Accounts Synced Up Successfully"));
+                syncmanager.reSync(payload.syncId, success("Resync Successful"));
+                success("Complete re-sync");
+
             }
         }
 
-        public getSyncStatus(successCB, errorCB, args) {
-            if (this.checkFirstArg(arguments)) return;
-            var payload = args[1];
-            var syncmanager = this.manager.SyncManager.getInstance();
+        public syncUp(success, fail, args) {
+            if (this.checkFirstArg(args)) return;
+            var syncmanager = this.getInstance();
             if (!syncmanager) {
-                errorCB("Error in getting instance for SmartSync");
+                fail("Error in getting instance for SmartSync");
             }
             else {
-                syncmanager.getSyncStatus(payload.syncId);
-                successCB();
+                var syncState = syncmanager.syncUp(args[1], args[2], args[3], null);
+                success(syncState);
+            }
+        }
+
+        public getSyncStatus(success, fail, args) {
+            if (this.checkFirstArg(args)) return;
+            var payload = args[1];
+            var syncmanager = this.getInstance();
+            if (!syncmanager) {
+                fail("Error in getting instance for SmartSync");
+            }
+            else {
+                var syncState = syncmanager.getSyncStatus(payload.syncId);
+                success(syncState);
             }
         }
     }

@@ -91,19 +91,19 @@
     <Content Include="SQLitePCL.Ext.dll" />
     <Content Include="typescript\salesforce.windows.core.js" />
     <Content Include="typescript\salesforce.windows.core.js.map" />
-    <Content Include="typescript\salesforce.windows.core.ts" />
+    <TypeScriptCompile Include="typescript\salesforce.windows.core.ts" />
     <Content Include="typescript\salesforce.windows.smartstore.js" />
     <Content Include="typescript\salesforce.windows.smartstore.js.map" />
-    <Content Include="typescript\salesforce.windows.smartstore.ts" />
+    <TypeScriptCompile Include="typescript\salesforce.windows.smartstore.ts" />
     <Content Include="typescript\salesforce.windows.smartsync.js" />
     <Content Include="typescript\salesforce.windows.smartsync.js.map" />
-    <Content Include="typescript\salesforce.windows.smartsync.ts" />
-    <Content Include="typings\Salesforce.SDK.Hybrid.d.ts" />
-    <Content Include="typings\Salesforce.SDK.Hybrid.SmartStore.d.ts" />
-    <Content Include="typings\Salesforce.SDK.Hybrid.SmartSync.d.ts" />
-    <Content Include="typings\winjs-3.0.d.ts" />
-    <Content Include="typings\winrt.d.ts" />
+    <TypeScriptCompile Include="typescript\salesforce.windows.smartsync.ts" />
     <None Include="Salesforce.Sample.SmartSyncExplorerHybrid_TemporaryKey.pfx" />
+    <TypeScriptCompile Include="typings\Salesforce.SDK.Hybrid.d.ts" />
+    <TypeScriptCompile Include="typings\Salesforce.SDK.Hybrid.SmartStore.d.ts" />
+    <TypeScriptCompile Include="typings\Salesforce.SDK.Hybrid.SmartSync.d.ts" />
+    <TypeScriptCompile Include="typings\winjs-3.0.d.ts" />
+    <TypeScriptCompile Include="typings\winrt.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4a0dddb5-7a95-4fbf-97cc-616d07737a77}" />

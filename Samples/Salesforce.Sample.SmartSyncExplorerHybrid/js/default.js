@@ -5,6 +5,7 @@
     var app = WinJS.Application;
     var activation = Windows.ApplicationModel.Activation;
     var oauth = new SalesforceJS.OAuth2();
+    var smartSync = new SmartSyncJS.SmartSync();
 
     var fetchServers = function () {
         var listItemsHtml = document.querySelector('#servers');
@@ -262,19 +263,25 @@
         if (navigator.onLine) {
             var smart = Salesforce.SDK.Hybrid.SmartStore;
             var smartstore;
-            var syncmanager;
+            var syncState;
             oauth.getUser(function success(result) {
                 smartstore = smart.SmartStore.getSmartStore(result);
-                syncmanager = Salesforce.SDK.Hybrid.SmartSync.SyncManager.getInstance(result);
             }, function fail(error) {
                 console.log("Error in getting account information: " + error);
             });
             var fieldlist = ["FirstName", "LastName", "Title", "HomePhone", "Email", "Department"];
             var mergemodeoptions = Salesforce.SDK.Hybrid.SmartSync.Models.MergeModeOptions;
             var options = Salesforce.SDK.Hybrid.SmartSync.Models.SyncOptions.optionsForSyncUp(fieldlist, mergemodeoptions.leaveIfChanged);
-            var target = new Salesforce.SDK.Hybrid.SmartSync.Models.SyncUpTarget;
-            var sync = syncmanager.syncUp(target, options, "contacts", null);
-            handlesyncupdate(sync);
+            var target = new Salesforce.SDK.Hybrid.SmartSync.Models.SyncUpTarget();
+            var args = [false, target, options, "contacts"];
+            smartSync.syncUp(function success(result) {
+                syncState = result;
+            }, function fail(result) {
+                syncState = result;
+            },
+            args);
+            //var sync = syncmanager.syncUp(target, options, "contacts", null);
+            //handlesyncupdate(sync);
             loaddatafromsmartstore(null);
         } else {
             //Show a toast stating no netwrok available
