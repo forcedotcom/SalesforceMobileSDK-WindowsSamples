@@ -116,7 +116,7 @@ module SalesforceJS {
                 var startUri = new Windows.Foundation.Uri(startUriStr);
                 var endUri = new Windows.Foundation.Uri(boot.oauthRedirectURI);
                 Windows.Security.Authentication.Web.WebAuthenticationBroker.authenticateAsync(
-                        Windows.Security.Authentication.Web.WebAuthenticationOptions.none, startUri, endUri)
+                    Windows.Security.Authentication.Web.WebAuthenticationOptions.none, startUri, endUri)
                     .done(result => {
                         if (result.responseData == "") {
                             reject(result.responseStatus);
@@ -149,7 +149,7 @@ module SalesforceJS {
                 } else {
                     resolve();
                 }
-            });   
+            });
         }
 
         public getAuthCredentials(success, fail) {
@@ -161,7 +161,7 @@ module SalesforceJS {
             }
         }
 
-        public forcetkRefresh (success, fail) {
+        public forcetkRefresh(success, fail) {
             var account = this.auth.HybridAccountManager.getAccount();
             if (account != null) {
                 this.auth.OAuth2.refreshAuthToken(account).done(resolve => {
@@ -198,7 +198,7 @@ module SalesforceJS {
             }
         }
 
-        public switchToUser(account : Salesforce.SDK.Hybrid.Auth.Account) {
+        public switchToUser(account: Salesforce.SDK.Hybrid.Auth.Account) {
             return this.auth.HybridAccountManager.switchToAccount(account);
         }
 

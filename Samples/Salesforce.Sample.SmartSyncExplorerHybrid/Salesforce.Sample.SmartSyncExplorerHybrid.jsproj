@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
+  <Import Project="$(ProjectDir)\..\packages\TypeScript.MSBuildTask.1.7.3\tools\MSBuild\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(ProjectDir)\..\packages\TypeScript.MSBuildTask.1.7.3\tools\MSBuild\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|AnyCPU">
       <Configuration>Debug</Configuration>
@@ -85,8 +86,8 @@
     <Content Include="css\default.css" />
     <Content Include="js\stackrouter.js" />
     <Content Include="js\underscore-min.js" />
-    <Content Include="js\WinJS-3.0.js" />
     <Content Include="Newtonsoft.Json.dll" />
+    <Content Include="packages.config" />
     <Content Include="sqlite3.dll" />
     <Content Include="SQLitePCL.Ext.dll" />
     <Content Include="typescript\salesforce.windows.core.js" />
@@ -98,6 +99,28 @@
     <Content Include="typescript\salesforce.windows.smartsync.js" />
     <Content Include="typescript\salesforce.windows.smartsync.js.map" />
     <TypeScriptCompile Include="typescript\salesforce.windows.smartsync.ts" />
+    <Content Include="typescript\salesforce.windows.smartsync.ts" />
+    <Content Include="typings\Salesforce.SDK.Hybrid.d.ts" />
+    <Content Include="typings\Salesforce.SDK.Hybrid.SmartStore.d.ts" />
+    <Content Include="typings\Salesforce.SDK.Hybrid.SmartSync.d.ts" />
+    <Content Include="typings\winrt.d.ts" />
+    <Content Include="WinJS\css\ui-dark.css" />
+    <Content Include="WinJS\css\ui-dark.min.css" />
+    <Content Include="WinJS\css\ui-light.css" />
+    <Content Include="WinJS\css\ui-light.min.css" />
+    <Content Include="WinJS\fonts\Symbols.ttf" />
+    <Content Include="WinJS\js\base.js" />
+    <Content Include="WinJS\js\base.min.js" />
+    <Content Include="WinJS\js\base.min.js.map" />
+    <Content Include="WinJS\js\en-US\ui.strings.js" />
+    <Content Include="WinJS\js\ui.js" />
+    <Content Include="WinJS\js\ui.min.js" />
+    <Content Include="WinJS\js\ui.min.js.map" />
+    <Content Include="WinJS\js\WinJS.intellisense-setup.js" />
+    <Content Include="WinJS\js\WinJS.intellisense.js" />
+    <Content Include="WinJS\License.txt" />
+    <Content Include="WinJS\README.md" />
+
     <None Include="Salesforce.Sample.SmartSyncExplorerHybrid_TemporaryKey.pfx" />
     <TypeScriptCompile Include="typings\Salesforce.SDK.Hybrid.d.ts" />
     <TypeScriptCompile Include="typings\Salesforce.SDK.Hybrid.SmartStore.d.ts" />
@@ -115,6 +138,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\$(WMSJSProjectDirectory)\Microsoft.VisualStudio.$(WMSJSProject).targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
+  <Import Project="$(ProjectDir)\..\packages\TypeScript.MSBuildTask.1.7.3\tools\MSBuild\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(ProjectDir)\..\packages\TypeScript.MSBuildTask.1.7.3\tools\MSBuild\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.jsproj.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.jsproj.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below then uncomment
        that target and the DisableFastUpToDateCheck PropertyGroup. 
