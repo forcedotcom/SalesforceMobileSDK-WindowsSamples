@@ -312,7 +312,7 @@ module SmartStoreJS {
                 errorCB("No active account");
             } else {
                 sm.clearSoup(args[0]);
-                successCB("Soup" + args[0] + "cleared successfully");
+                successCB("Soup" + args[0] + "is cleared successfully");
             }
         }
 
@@ -399,9 +399,6 @@ module SmartStoreJS {
                 for (var record of args[1]) {
                     sm.upsert(args[0], JSON.stringify(record), args[1].externalIdPath);
                 }
-                //args[1].forEach(function (record) {
-                //    sm.upsert(args[0], JSON.stringify(record), record.externalIdPath)
-                //});
                 successCB(args[1]);
             }
         }

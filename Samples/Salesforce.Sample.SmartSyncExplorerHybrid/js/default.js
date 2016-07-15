@@ -5,7 +5,6 @@
     var app = WinJS.Application;
     var activation = Windows.ApplicationModel.Activation;
     var oauth = new SalesforceJS.OAuth2();
-    var smartSync = new SmartSyncJS.SmartSync();
     var smartstore = new SmartStoreJS.SmartStore();
     var smartsync = new SmartSyncJS.SmartSync();
     var queryspec = new SmartStoreJS.QuerySpec();
@@ -244,7 +243,7 @@
         }, ["contacts", indexspec]);
         if (syncId === -1) {
             var target = new Salesforce.SDK.Hybrid.SmartSync.Models.SoqlSyncDownTarget(soql);
-            smartSync.syncDown(function success(result) {
+            smartsync.syncDown(function success(result) {
                 handlesyncupdate(result);
             }, function fail(result) {
                 console.log(result);
@@ -295,7 +294,7 @@
             var options = Salesforce.SDK.Hybrid.SmartSync.Models.SyncOptions.optionsForSyncUp(fieldlist, mergemodeoptions.leaveIfChanged);
             var target = new Salesforce.SDK.Hybrid.SmartSync.Models.SyncUpTarget();
             var args = [target, options, "contacts"];
-            smartSync.syncUp(function success(result) {
+            smartsync.syncUp(function success(result) {
                 syncState = result;
                 handlesyncupdate(syncState);
             }, function fail(result) {

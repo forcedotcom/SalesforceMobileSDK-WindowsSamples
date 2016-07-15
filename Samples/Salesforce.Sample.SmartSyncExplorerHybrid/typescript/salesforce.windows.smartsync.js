@@ -54,7 +54,6 @@ var SmartSyncJS;
             else {
                 var syncState = syncmanager.syncDown(args[0], args[1], args[2], args[3]);
                 success(syncState);
-                fail("Error in Sync Down");
             }
         };
         SmartSync.prototype.reSync = function (success, fail, args) {
@@ -76,7 +75,6 @@ var SmartSyncJS;
             else {
                 var syncState = syncmanager.syncUp(args[0], args[1], args[2], null);
                 success(syncState);
-                fail("Error in Sync Up");
             }
         };
         SmartSync.prototype.getSyncStatus = function (success, fail, args) {
@@ -94,3 +92,4 @@ var SmartSyncJS;
     }());
     SmartSyncJS.SmartSync = SmartSync;
 })(SmartSyncJS || (SmartSyncJS = {}));
+//# sourceMappingURL=salesforce.windows.smartsync.js.map
