@@ -5,7 +5,9 @@
     var app = WinJS.Application;
     var activation = Windows.ApplicationModel.Activation;
     var oauth = new SalesforceJS.OAuth2();
-    var smartSync = new SmartSyncJS.SmartSync();
+    var smartstore = new SmartStoreJS.SmartStore();
+    var smartsync = new SmartSyncJS.SmartSync();
+    var queryspec = new SmartStoreJS.QuerySpec();
 
     var fetchServers = function () {
         var listItemsHtml = document.querySelector('#servers');
@@ -94,11 +96,7 @@
         }
     }
 
-    var smart = Salesforce.SDK.Hybrid.SmartStore;
-    var smartstore;
-    var syncmanager;
-
-    var goBack = function() {
+    var goBack = function () {
         var details = document.getElementById("contactdetails");
         var contacts = document.getElementById("contacts");
         var syncbutton = document.getElementById("syncbutton");
@@ -111,21 +109,38 @@
     }
 
     var deletecontact = function (contactid) {
-        var soupEntryId = smartstore.lookupSoupEntryId("contacts", "Id", contactid);
-        var idArray = [soupEntryId];
-        var item = smartstore.retrieve("contacts",idArray);
-        item["__local__"] = true;
-        item["__locallyDeleted__"] = true;
-        smartstore.upsert("contacts", JSON.stringify(JSON.parse(item)[0]));
-        var details = document.getElementById("contactdetails");
-        var contacts = document.getElementById("contacts");
-        var syncbutton = document.getElementById("syncbutton");
-        var addbutton = document.getElementById("addbutton");
-        contacts.setAttribute("style", "display: block;");
-        syncbutton.setAttribute("style", "display: block;");
-        addbutton.setAttribute("style", "display: block;");
-        details.setAttribute("style", "display: none;");
+        smartstore.lookupSoupEntryId(function (soupEntryId) {
+            var idArray = [soupEntryId];
+            var contact;
+            smartstore.retrieveSoupEntries(function (item) {
+                contact = JSON.parse(item);
+            }, function () {
+                console.log("Error in retrieving contact from smart store")
+            }, ["contacts", idArray]);
+
+            contact[0].__local__ = true;
+            contact[0].__locallyDeleted__ = true;
+
+            smartstore.upsertSoupEntries(function () {
+                var details = document.getElementById("contactdetails");
+                var contacts = document.getElementById("contacts");
+                var syncbutton = document.getElementById("syncbutton");
+                var addbutton = document.getElementById("addbutton");
+                contacts.setAttribute("style", "display: block;");
+                syncbutton.setAttribute("style", "display: block;");
+                addbutton.setAttribute("style", "display: block;");
+                details.setAttribute("style", "display: none;");
+                loaddatafromsmartstore(null);
+            }, function () {
+                console.log("Error in deleting contact");
+            }, ["contacts", contact]);
+        }, function () {
+            console.log("Error in looking up soup entry");
+        }, ["contacts", "Id", contactid]);
+
     }
+
+
 
     var navigatetodetails = function (contact) {
         //get contact with ID from smartstore
@@ -148,41 +163,45 @@
         details.setAttribute("style", "display: block;");
     }
 
-    var loaddatafromsmartstore = function(element) {
-        if (smartstore.hasSoup("contacts")) {
-            var queryspec = smart.QuerySpec.buildAllQuerySpec("contacts", "Name", 0, 4000);
-            var results = smartstore.query(queryspec, 0);
-            if (results == null) {
-                return;
-            }
-            
-            var contacts = JSON.parse(results);
-            var listItemsHtml = document.querySelector('#contacts');
-            for (var i = 0; i < contacts.length; i++) {
-                if (element != null) {
-                    if (contacts[i].id === element.id) {
-                        contacts[i] = element;
+    var loaddatafromsmartstore = function (element) {
+        smartstore.hasSoup(function () {
+            var spec = queryspec.buildAllQuerySpec("contacts", "Name", "ascending", 4000);
+            smartstore.querySoup(function (results) {
+                var contacts = JSON.parse(results);
+                var listItemsHtml = document.querySelector('#contacts');
+                for (var i = 0; i < contacts.length; i++) {
+                    if (!contacts[i].__locallyDeleted__) {
+                        if (element != null) {
+                            if (contacts[i].id === element.id) {
+                                contacts[i] = element;
+                            }
+                        }
+                        var li = document.createElement("li");
+                        var div = document.createElement("div");
+                        //Setup li element
+                        li.setAttribute("class", "table-view-cell");
+                        li.setAttribute("id", "contact" + contacts[i].Id);
+                        //Set up div that holds the contact info
+                        div.setAttribute("class", "media-body");
+                        div.innerHTML = contacts[i].Name;
+                        //Ad div to li element
+                        li.appendChild(div);
+                        //Add everything to the contacts div
+                        listItemsHtml.appendChild(li);
+                        li.addEventListener("click", function (row) {
+                            return function () {
+                                navigatetodetails(row);
+                            };
+                        }(contacts[i]));
                     }
                 }
-                var li = document.createElement("li");
-                var div = document.createElement("div");
-                //Setup li element
-                li.setAttribute("class", "table-view-cell");
-                li.setAttribute("id", "contact" + contacts[i].Id);
-                //Set up div that holds the contact info
-                div.setAttribute("class", "media-body");
-                div.innerHTML = contacts[i].Name;
-                //Ad div to li element
-                li.appendChild(div);
-                //Add everything to the contacts div
-                listItemsHtml.appendChild(li);
-                li.addEventListener("click", function (row) {
-                    return function() {
-                        navigatetodetails(row);
-                    };
-                }(contacts[i]));
-            }
-        }
+            }, function () {
+                return;
+            }, [spec, 0]);
+
+        }, function () {
+            console.log("Soup Does not Exist!");
+        }, ["contacts"]);
     }
 
     var handlesyncupdate = function (sync) {
@@ -200,28 +219,37 @@
         var soql = 'SELECT Id, Name, Title, Department, Phone, Email FROM Contact LIMIT 4000';
         var syncId = -1;
         oauth.getUser(function success(result) {
-            smartstore = smart.SmartStore.getSmartStore(result);
-            syncmanager = Salesforce.SDK.Hybrid.SmartSync.SyncManager.getInstance(result);
+            var store = smartstore.getSmartStore(false);
+            syncmanager = smartsync.getInstance(result);
         }, function fail(error) {
             console.log("Error in getting account information: " + error);
         });
 
+        var smartstoretype = Salesforce.SDK.Hybrid.SmartStore.SmartStoreType;
+
         var indexspec = [
-            new smart.IndexSpec("Id", smart.SmartStoreType.smartString),
-            new smart.IndexSpec("Name", smart.SmartStoreType.smartString),
-            new smart.IndexSpec("__locallycreated__", smart.SmartStoreType.smartString),
-            new smart.IndexSpec("__locally_updated__", smart.SmartStoreType.smartString),
-            new smart.IndexSpec("__locally_deleted__", smart.SmartStoreType.smartString),
-            new smart.IndexSpec("__local__", smart.SmartStoreType.smartString)
+            new SmartStoreJS.IndexSpec("Id", smartstoretype.smartString.columnType),
+            new SmartStoreJS.IndexSpec("Name", smartstoretype.smartString.columnType),
+            new SmartStoreJS.IndexSpec("__locallycreated__", smartstoretype.smartString.columnType),
+            new SmartStoreJS.IndexSpec("__locally_updated__", smartstoretype.smartString.columnType),
+            new SmartStoreJS.IndexSpec("__locally_deleted__", smartstoretype.smartString.columnType),
+            new SmartStoreJS.IndexSpec("__local__", smartstoretype.smartString.columnType)
         ];
 
-        smartstore.registerSoup("contacts", indexspec);
+        smartstore.registerSoup(function () {
+            console.log("Soup registered successfully!");
+        }, function () {
+            console.log("Error in registering soup");
+        }, ["contacts", indexspec]);
         if (syncId === -1) {
             var target = new Salesforce.SDK.Hybrid.SmartSync.Models.SoqlSyncDownTarget(soql);
-            var sync = syncmanager.syncDown(target.asJson(), "contacts", null, null);
-            handlesyncupdate(sync);
+            smartsync.syncDown(function success(result) {
+                handlesyncupdate(result);
+            }, function fail(result) {
+                console.log(result);
+            },
+            [target.asJson(), "contacts", null, null]);
             loaddatafromsmartstore(null);
-            syncId = sync.id;
         }
         else {
             syncmanager.reSync(syncId, handlesyncupdate);
@@ -259,29 +287,20 @@
         notificationManager.createToastNotifier().show(toast);
     }
 
-    var syncdata = function() {
+    var syncdata = function () {
         if (navigator.onLine) {
-            var smart = Salesforce.SDK.Hybrid.SmartStore;
-            var smartstore;
-            var syncState;
-            oauth.getUser(function success(result) {
-                smartstore = smart.SmartStore.getSmartStore(result);
-            }, function fail(error) {
-                console.log("Error in getting account information: " + error);
-            });
             var fieldlist = ["FirstName", "LastName", "Title", "HomePhone", "Email", "Department"];
             var mergemodeoptions = Salesforce.SDK.Hybrid.SmartSync.Models.MergeModeOptions;
             var options = Salesforce.SDK.Hybrid.SmartSync.Models.SyncOptions.optionsForSyncUp(fieldlist, mergemodeoptions.leaveIfChanged);
             var target = new Salesforce.SDK.Hybrid.SmartSync.Models.SyncUpTarget();
-            var args = [false, target, options, "contacts"];
-            smartSync.syncUp(function success(result) {
+            var args = [target, options, "contacts"];
+            smartsync.syncUp(function success(result) {
                 syncState = result;
+                handlesyncupdate(syncState);
             }, function fail(result) {
-                syncState = result;
+                console.log(result);
             },
             args);
-            //var sync = syncmanager.syncUp(target, options, "contacts", null);
-            //handlesyncupdate(sync);
             loaddatafromsmartstore(null);
         } else {
             //Show a toast stating no netwrok available
@@ -297,17 +316,6 @@
 
     var logout = function () {
         oauth.logout().done(startup());
-           /* .then(function () {
-                var accounts;
-                oauth.getUser(function success(result) {
-                    accounts = result;
-                });
-                if (accounts.length > 0) {
-                    switchUser(accounts[0]);
-                } else {
-                    startup();
-                }
-            });*/
     }
 
     var refresh = function () {
@@ -322,7 +330,7 @@
         syncbutton.onclick = syncdata;
         //Setup button for adding new contact
         var addbutton = document.getElementById("addbutton");
-        addbutton.onclick = function() {
+        addbutton.onclick = function () {
             contacts.setAttribute("style", "display: none;");
             document.getElementById("contactid").value = '';
             document.getElementById("soupentryid").value = '';
@@ -342,12 +350,12 @@
         savebutton.onclick = function () {
             contactdetails.setAttribute("style", "display: none;");
             contacts.setAttribute("style", "display: block;");
-            var id = document.getElementById("id");
-            if (id == null)
+            var element = document.getElementById("contactid");
+            if (element.value == null || element.value == '')
                 savecontact(true);
             else
                 savecontact(false);
-            loaddatafromsmartstore(null);
+            loaddatafromsmartstore(element);
         }
 
         //Setup button for deleting contact
@@ -361,7 +369,7 @@
 
         //Setuo button for logout
         var logoutbutton = document.getElementById("logoutbutton");
-        logoutbutton.onclick = function() {
+        logoutbutton.onclick = function () {
             logout();
         }
     }
@@ -373,10 +381,8 @@
         var email = document.getElementById("email").value;
         var department = document.getElementById("department").value;
         var homephone = document.getElementById("homephone").value;
-
-        //var id = "local_" + smartstore.currentTimeMillis;
         if (isCreated) {
-            var id = "local_" + smartstore.currentTimeMillis;
+            var id = "local_" + smartstore.currentTimeMillis();
             var soupEntryId = " ";
         } else {
             var id = document.getElementById("contactid").value;
@@ -400,11 +406,18 @@
         };
         if (isCreated) {
             contact['attributes'] = attributes;
-            smartstore.create("contacts", JSON.stringify(contact));
+            smartstore.createSoupEntries(function () {
+                refresh();
+            }, function () {
+                console.log("Error in adding record to smarstore");
+            }, ["contacts", [contact]]);
         } else {
-            var info = smartstore.upsert("contacts", JSON.stringify(contact));
+            smartstore.upsertSoupEntries(function () {
+                refresh();
+            }, function () {
+                console.log("Error in saving to smartstore")
+            }, ["contacts", [contact]]);
         }
-        refresh();
     }
 
     var clearRecords = function (table) {
@@ -451,6 +464,13 @@
         // saved and restored across suspension. If you need to complete an
         // asynchronous operation before your application is suspended, call
         // args.setPromise().
+    };
+
+    // Generic error handler that does not terminate the app.
+    app.onerror = function errorHandler(e) {
+        appTrace.trace("Unhandled Error", "We failed to catch the following error, file a bug!", true);
+        appTrace.traceError(e);
+        return true; // We do not want the app to terminate.
     };
 
     app.start();

@@ -39,10 +39,12 @@ module SmartStoreJS {
         }
     }
 
+
+
     export class QuerySpec {
+        soupName: string
         path: string;
         queryType: string;
-        indexPath: string;
         matchKey: string;
         likeKey: string;
         beginKey: string;
@@ -51,81 +53,72 @@ module SmartStoreJS {
         order: string;
         pageSize: number;
 
-        constructor(p: string) {
+        constructor(s: string, p: string, q: string, m: string, l: string, b: string, e: string, sql: string, o: string, psize: number) {
             // the kind of query, one of: "exact","range", "like" or "smart":
             // "exact" uses matchKey, "range" uses beginKey and endKey, "like" uses likeKey, "smart" uses smartSql
-            this.queryType = "exact";
+            this.queryType = q;
 
             //path for the original IndexSpec you wish to use for search: may be a compound path eg Account.Owner.Name
-            this.indexPath = p;
+            this.path = p;
 
             //for queryType "exact"
-            this.matchKey = null;
+            this.matchKey = m;
 
             //for queryType "like"
-            this.likeKey = null;
+            this.likeKey = l;
 
             //for queryType "range"
             //the value at which query results may begin
-            this.beginKey = null;
+            this.beginKey = b;
             //the value at which query results may end
-            this.endKey = null;
+            this.endKey = e;
 
             // for queryType "smart"
-            this.smartSql = null;
+            this.smartSql = sql;
 
             //"ascending" or "descending" : optional
-            this.order = "ascending";
+            if (o)
+                this.order = o;
+            else
+                this.order = "ascending";
 
             //the number of entries to copy from native to javascript per each cursor page
-            this.pageSize = 10;
+            if (psize)
+                this.pageSize = psize;
+            else
+                this.pageSize = 10
+
+            this.soupName = s;
         }
 
         // Returns a query spec that will page through all soup entries in order by the given path value
         // Internally it simply does a range query with null begin and end keys
-        public buildAllQuerySpec(path: string, order: string, pageSize: number) {
-            let inst = new QuerySpec(path);
-            inst.queryType = "range";
-            if (order) { inst.order = order; } // override default only if a value was specified
-            if (pageSize) { inst.pageSize = pageSize; } // override default only if a value was specified
+        public buildAllQuerySpec(soupName: string, path: string, order: string, pageSize: number) {
+            var inst = new QuerySpec(soupName, path, "range", null, null, null, null, null, order, pageSize);
             return inst;
         }
 
         // Returns a query spec that will page all entries exactly matching the matchKey value for path
-        public buildExactQuerySpec(path: string, matchKey: string, pageSize: number) {
-            var inst = new QuerySpec(path);
-            inst.matchKey = matchKey;
-            if (pageSize) { inst.pageSize = pageSize; } // override default only if a value was specified
+        public buildExactQuerySpec(soupName: string, path: string, matchKey: string, pageSize: number) {
+            var inst = new QuerySpec(soupName, path, "exact", matchKey, null, null, null, null, null, pageSize);
             return inst;
         }
 
         // Returns a query spec that will page all entries in the range beginKey ...endKey for path
-        public buildRangeQuerySpec(path: string, beginKey: string, endKey: string, order: string, pageSize: number) {
-            var inst = new QuerySpec(path);
-            inst.queryType = "range";
-            inst.beginKey = beginKey;
-            inst.endKey = endKey;
-            if (order) { inst.order = order; } // override default only if a value was specified
-            if (pageSize) { inst.pageSize = pageSize; } // override default only if a value was specified
+        public buildRangeQuerySpec(soupName: string, path: string, beginKey: string, endKey: string, order: string, pageSize: number) {
+            var inst = new QuerySpec(soupName, path, "range", null, null, beginKey, endKey, null, order, pageSize);
             return inst;
         }
 
         // Returns a query spec that will page all entries matching the given likeKey value for path
-        public buildLikeQuerySpec = function (path: string, likeKey: string, order: string, pageSize: number) {
-            var inst = new QuerySpec(path);
-            inst.queryType = "like";
-            inst.likeKey = likeKey;
-            if (order) { inst.order = order; } // override default only if a value was specified
-            if (pageSize) { inst.pageSize = pageSize; } // override default only if a value was specified
+        public buildLikeQuerySpec = function (soupName: string, path: string, likeKey: string, order: string, pageSize: number) {
+            var inst = new QuerySpec(soupName, path, "like", null, likeKey, null, null, null, order, pageSize);
             return inst;
         }
 
         // Returns a query spec that will page all results returned by smartSql
         public buildSmartQuerySpec(smartSql: string, pageSize: number) {
-            var inst = new QuerySpec(null);
-            inst.queryType = "smart";
-            inst.smartSql = smartSql;
-            if (pageSize) { inst.pageSize = pageSize; } // override default only if a value was specified
+            var inst = new QuerySpec(null, null, "smart", null, null, null, null, smartSql, null, pageSize);
             return inst;
         }
     }
@@ -270,41 +263,36 @@ module SmartStoreJS {
         }
 
         public registerSoup(successCB, errorCB, args) {
-            var payload = args[1];
-            var specs = JSON.stringify(payload.indexes);
-            this.logger.storeConsole["debug"] = "SmartStore.registerSoup:isGlobalStore=" + payload.isGlobalStore + ",soupName=" + payload.soupName + ",indexSpecs=" + specs;
-            var sm = this.getSmartStore(payload.isGlobalStore);
+            let specs = JSON.stringify(args[1]);
+            console.log("SmartStore.registerSoup:soupName=" + args[0] + ",indexSpecs=" + specs);
+            var sm = this.getSmartStore(false);
             if (!sm) {
                 errorCB("No active account");
             } else {
-                var indexspecs = this.smartStore.IndexSpec.jsonToIndexSpecCollection(specs);
-                sm.registerSoup(payload.soupName, indexspecs);
+                var indexspecs = IndexSpec.jsonToIndexSpecCollection(specs);
+                sm.registerSoup(args[0], indexspecs);
                 successCB();
             }
         }
 
         public removeSoup(successCB, errorCB, args) {
-            var payload = args[1];
-            var specs = JSON.stringify(payload.indexes);
-            this.logger.storeConsole["debug"] = "SmartStore.removeSoup:isGlobalStore=" + payload.isGlobalStore + ",soupName=" + payload.soupName;
-            var sm = this.getSmartStore(payload.isGlobalStore);
+            console.log("SmartStore.removeSoup:soupName=" + args[0]);
+            var sm = this.getSmartStore(false);
             if (!sm) {
                 errorCB("No active account");
             } else {
-                var indexspecs = this.smartStore.IndexSpec.jsonToIndexSpecCollection(specs);
-                sm.dropSoup(payload.soupName);
+                sm.dropSoup(args[0]);
                 successCB();
             }
         }
 
         public getSoupIndexSpecs(successCB, errorCB, args) {
-            var payload = args[1];
-            this.logger.storeConsole["debug"] = "SmartStore.getSoupIndexSpecs:isGlobalStore=" + payload.isGlobalStore + ",soupName=" + payload.soupName;
-            var sm = this.getSmartStore(payload.isGlobalStore);
+            console.log("SmartStore.getSoupIndexSpecs:soupName=" + args[0]);
+            var sm = this.getSmartStore(false);
             if (!sm) {
                 errorCB("No active account");
             } else {
-                var specs = sm.getSoupIndexSpecsSerialized(payload.soupName);
+                var specs = sm.getSoupIndexSpecsSerialized(args[0]);
                 successCB(specs);
             }
         }
@@ -318,78 +306,82 @@ module SmartStoreJS {
         }
 
         public clearSoup = function (successCB, errorCB, args) {
-            var payload = args[1];
-            this.logger.storeConsole["debug"] = "SmartStore.clearSoup:isGlobalStore=" + payload.isGlobalStore + ",soupName=" + payload.soupName;
-            var sm = this.getSmartStore(payload.isGlobalStore);
+            console.log("SmartStore.clearSoup:soupName=" + args[0]);
+            var sm = this.getSmartStore(false);
             if (!sm) {
                 errorCB("No active account");
             } else {
-                sm.clearSoup(payload.soupName);
-                successCB();
+                sm.clearSoup(args[0]);
+                successCB("Soup" + args[0] + "is cleared successfully");
             }
         }
 
         public soupExists(successCB, errorCB, args) {
-            if (this.checkFirstArg(arguments)) return;
-            var payload = args[1];
-            this.logger.storeConsole["debug"] = "SmartStore.soupExists:isGlobalStore=" + payload.isGlobalStore + ",soupName=" + payload.soupName;
-            var sm = this.getSmartStore(payload.isGlobalStore);
+            console.log("SmartStore.soupExists:soupName=" + args[0]);
+            var sm = this.getSmartStore(false);
             if (!sm) {
                 errorCB("No active account");
             } else {
-                successCB(sm.hasSoup(payload.soupName));
+                successCB(sm.hasSoup(args[0]));
             }
         }
 
         public querySoup(successCB, errorCB, args) {
-            var payload = args[1];
-            var spec = payload.querySpec;
+            var spec = args[0];
             if (spec.queryType == "smart") throw new Error("Smart queries can only be run using runSmartQuery");
-            this.logger.storeConsole["debug"] = "SmartStore.querySoup:isGlobalStore=" + payload.isGlobalStore + ",soupName=" + payload.soupName + ",indexPath=" + spec.indexPath;
-            var sm = this.getSmartStore(payload.isGlobalStore);
+            console.log("SmartStore.querySoup:soupName=" + spec.soupName + ",indexPath=" + spec.indexPath);
+            var sm = this.getSmartStore(false);
             if (!sm) {
                 errorCB("No active account");
             } else {
                 var qs;
                 switch (spec.queryType) {
                     case "exact":
-                        qs = this.smartStore.QuerySpec.buildExactQuerySpec(payload.soupName,spec.path, spec.exactMatchKey, spec.pageSize);
+                        qs = this.smartStore.QuerySpec.buildExactQuerySpec(spec.soupName,spec.path, spec.exactMatchKey, spec.pageSize);
                         break;
                     case "like":
-                        qs = this.smartStore.QuerySpec.buildLikeQuerySpec(payload.soupName, spec.path, spec.likeKey, spec.order, spec.pageSize);
+                        qs = this.smartStore.QuerySpec.buildLikeQuerySpec(spec.soupName, spec.path, spec.likeKey, spec.order, spec.pageSize);
                         break;
                     case "range":
-                        qs = this.smartStore.QuerySpec.buildRangeQuerySpec(payload.soupName, spec.path, spec.beginKey, spec.endKey, spec.order, spec.pageSize);
+                        qs = this.smartStore.QuerySpec.buildRangeQuerySpec(spec.soupName, spec.path, spec.beginKey, spec.endKey, spec.order, spec.pageSize);
                         break;
                     default:
                         qs = this.smartStore.QuerySpec.buildSmartQuerySpec(spec.smartSql, spec.pageSize);
                 }
-                var smart = this.smartStore.QuerySpec.buildSmartQuerySpec(spec.smartSql, spec.pageSize);
-                successCB(sm.query(qs, payload.pageIndex));
+                successCB(sm.query(qs, args[1]));
             }
         }
 
         runSmartQuery(successCB, errorCB, args) {
-            var payload = args[1];
-            var spec = payload.querySpec;
-            this.logger.storeConsole["debug"] = "SmartStore.runSmartQuery:isGlobalStore=" + payload.isGlobalStore + ",soupName=" + payload.soupName + ",indexPath=" + spec.indexPath;
-            var sm = this.getSmartStore(payload.isGlobalStore);
+           console.log("SmartStore.runSmartQuery:soupName=" + args[0].soupName + ",indexPath=" + args[0].path);
+            var sm = this.getSmartStore(false);
             if (!sm) {
                 errorCB("No active account");
             } else {
-                var smart = this.smartStore.QuerySpec.buildSmartQuerySpec(spec.smartSql, spec.pageSize);
-                successCB(sm.query(smart, payload.pageIndex));
+                var smart = this.smartStore.QuerySpec.buildSmartQuerySpec(args[0].smartSql, args[0].pageSize);
+                successCB(sm.query(smart, args[1]));
+            }
+        }
+
+        public createSoupEntries(successCB, errorCB, args) {
+            console.log("SmartStore.upsertSoupEntries:soupName=" + args[0] + ",element=" + args[1]);
+            var sm = this.getSmartStore(false);
+            if (!sm) {
+                errorCB("No active account");
+            } else {
+                for (var record of args[1]) {
+                    successCB(sm.create(args[0], JSON.stringify(record)));
+                }
             }
         }
 
         public retrieveSoupEntries(successCB, errorCB, args) {
-            var payload = args[1];
-            this.logger.storeConsole["debug"] = "SmartStore.soupExists:isGlobalStore=" + payload.isGlobalStore + ",soupName=" + payload.soupName + ",entryIds=" + payload.entryIds;
-            var sm = this.getSmartStore(payload.isGlobalStore);
+            console.log("SmartStore.soupExists:soupName=" + args[0] + ",entryIds=" + args[1]);
+            var sm = this.getSmartStore(false);
             if (!sm) {
                 errorCB("No active account");
             } else {
-                successCB(sm.retrieve(payload.soupName, payload.entryIds));
+                successCB(sm.retrieve(args[0], args[1]));
             }
         }
 
@@ -399,28 +391,66 @@ module SmartStoreJS {
         }
 
         private upsertSoupEntriesWithExternalId(successCB, errorCB, args) {
-            var payload = args[1];
-            this.logger.storeConsole["debug"] = "SmartStore.upsertSoupEntries:isGlobalStore=" + payload.isGlobalStore + ",soupName=" + payload.soupName + ",entries=" + payload.entries.length + ",externalIdPath=" + payload.externalIdPath;
-            var sm = this.getSmartStore(payload.isGlobalStore);
+            console.log("SmartStore.upsertSoupEntries:soupName=" + args[0] + ",entries=" + args[1] + ",externalIdPath=" + args[1].externalIdPath);
+            var sm = this.getSmartStore(false);
             if (!sm) {
                 errorCB("No active account");
             } else {
-                payload.entries.forEach(function (record) {
-                    sm.upsert(payload.soupName, JSON.stringify(record), payload.externalIdPath)
-                });
-                successCB(payload.entries);
+                for (var record of args[1]) {
+                    sm.upsert(args[0], JSON.stringify(record), args[1].externalIdPath);
+                }
+                successCB(args[1]);
             }
         }
 
         public removeFromSoup(successCB, errorCB, args) {
-            var payload = args[1];
-            this.logger.storeConsole["debug"] = "SmartStore.removeFromSoup:isGlobalStore=" + payload.isGlobalStore + ",soupName=" + payload.soupName + ",entryIds=" + payload.entryIds;
-            var sm = this.getSmartStore(payload.isGlobalStore);
+            console.log("SmartStore.removeFromSoup:soupName=" + args[0] + ",entryIds=" + args[1]);
+            var sm = this.getSmartStore(false);
             if (!sm) {
                 errorCB("No active account");
             } else {
-                successCB(sm.delete(payload.soupName, payload.entryIds, true));
+                successCB(sm.delete(args[0], args[1], true));
             }
+        }
+
+        public lookupSoupEntryId(successCB, errorCB, args) {
+            console.log("SmartStore.lookupSoupEntryId:soupName=" + args[0] + ",fieldPath=" + args[1] + ",fieldValue=" + args[2]);
+            var sm = this.getSmartStore(false);
+            if (!sm) {
+                errorCB("No active account");
+            } else {
+                successCB(sm.lookupSoupEntryId(args[0], args[1], args[2]));
+            }
+        }
+
+        public hasSoup(successCB, errorCB, args) {
+            console.log("SmartStore.hasSoup:soupName=" + args[0]);
+            var sm = this.getSmartStore(false);
+            if (!sm) {
+                errorCB("No active account");
+            } else {
+                successCB(sm.hasSoup(args[0]));
+            } 
+        }
+
+        public currentTimeMillis() {
+            return this.getSmartStore(false).currentTimeMillis;
+        }
+    }
+
+    export class IndexSpec {
+        path: string;
+        type: Salesforce.SDK.Hybrid.SmartStore.SmartStoreType;
+        columnName: string;
+
+        constructor(p: string, t: Salesforce.SDK.Hybrid.SmartStore.SmartStoreType, c?: string) {
+            this.path = p;
+            this.type = t;
+            this.columnName = c;
+        };
+
+        public static jsonToIndexSpecCollection(json: string) {
+            return Salesforce.SDK.Hybrid.SmartStore.IndexSpec.jsonToIndexSpecCollection(json);
         }
     }
 }

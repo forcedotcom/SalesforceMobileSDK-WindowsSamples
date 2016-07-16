@@ -53,21 +53,18 @@ module SmartSyncJS {
         }
 
         public syncDown(success, fail, args) {
-            if (this.checkFirstArg(args)) return;
-            var payload = args[1];
             var syncmanager = this.getInstance();
             if (!syncmanager) {
                 fail("Error in getting instance for SmartSync");
             }
             else {
-                var syncState = syncmanager.syncDown(payload.target.asJson(), payload.soupName, null, payload.options);
+                var syncState = syncmanager.syncDown(args[0], args[1], args[2], args[3]);
                 success(syncState);
             }
         }
 
         public reSync(success, fail, args) {
-            if (this.checkFirstArg(args)) return;
-            var payload = args[1];
+            var payload = args[0];
             var syncmanager = this.getInstance();
             if (!syncmanager) {
                 fail("Error in getting instance for SmartSync");
@@ -80,20 +77,18 @@ module SmartSyncJS {
         }
 
         public syncUp(success, fail, args) {
-            if (this.checkFirstArg(args)) return;
             var syncmanager = this.getInstance();
             if (!syncmanager) {
                 fail("Error in getting instance for SmartSync");
             }
             else {
-                var syncState = syncmanager.syncUp(args[1], args[2], args[3], null);
+                var syncState = syncmanager.syncUp(args[0], args[1], args[2], null);
                 success(syncState);
             }
         }
 
         public getSyncStatus(success, fail, args) {
-            if (this.checkFirstArg(args)) return;
-            var payload = args[1];
+            var payload = args[0];
             var syncmanager = this.getInstance();
             if (!syncmanager) {
                 fail("Error in getting instance for SmartSync");

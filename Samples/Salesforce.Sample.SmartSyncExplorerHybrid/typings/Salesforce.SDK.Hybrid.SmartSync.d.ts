@@ -24,6 +24,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+/// <reference path="../typings/winrt.d.ts"/>
+/// <reference path="../typings/Salesforce.SDK.Hybrid.d.ts"/>
+/// <reference path="../typings/Salesforce.SDK.Hybrid.SmartStore.d.ts"/>
 
 
 declare module Salesforce.SDK.Hybrid.SmartSync {

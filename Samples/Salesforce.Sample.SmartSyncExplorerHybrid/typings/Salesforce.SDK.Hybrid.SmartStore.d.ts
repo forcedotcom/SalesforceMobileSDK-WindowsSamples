@@ -24,6 +24,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+/// <reference path="../typings/winrt.d.ts"/>
+/// <reference path="../typings/Salesforce.SDK.Hybrid.d.ts"/>
+
 declare module Salesforce.SDK.Hybrid.SmartStore {
 
     export class DBOpenHelper implements Salesforce.SDK.Hybrid.SmartStore.IDBOpenHelperClass {
@@ -48,7 +51,7 @@ declare module Salesforce.SDK.Hybrid.SmartStore {
         constructor(path: string, type: Salesforce.SDK.Hybrid.SmartStore.SmartStoreType, columnName: string);
         static mapForIndexSpecs(indexSpecs: Salesforce.SDK.Hybrid.SmartStore.IndexSpec[]): Windows.Foundation.Collections.IMap<string,Salesforce.SDK.Hybrid.SmartStore.IndexSpec>;
         toString(): string;
-        jsonToIndexSpecCollection(json: string): Salesforce.SDK.Hybrid.SmartStore.IndexSpec[]; 
+        static jsonToIndexSpecCollection(json: string): Salesforce.SDK.Hybrid.SmartStore.IndexSpec[]; 
     }
 
     export interface IQuerySpecClass {
@@ -103,6 +106,7 @@ declare module Salesforce.SDK.Hybrid.SmartStore {
 
     export class SmartStore implements Salesforce.SDK.Hybrid.SmartStore.ISmartStoreClass{
         constructor();
+        public currentTimeMillis: number;
         static deleteAllDatabases(includeGlobal: boolean): void;
         static generateDatabasePath(account: Salesforce.SDK.Hybrid.Auth.Account): string;
         static getGlobalSmartStore(): Salesforce.SDK.Hybrid.SmartStore.SmartStore;
