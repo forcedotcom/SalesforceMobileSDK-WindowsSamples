@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|AnyCPU">
       <Configuration>Debug</Configuration>
@@ -22,7 +21,6 @@
     <ProjectConfiguration Include="Release|AnyCPU">
       <Configuration>Release</Configuration>
       <Platform>AnyCPU</Platform>
-      <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Release|ARM">
       <Configuration>Release</Configuration>
@@ -41,7 +39,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>83aaf552-1034-40e4-b973-04106371a4d2</ProjectGuid>
+    <ProjectGuid>8d0c63ab-4107-4af9-a184-e9446df9b6e5</ProjectGuid>
     <TypeScriptToolsVersion>1.8</TypeScriptToolsVersion>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -99,11 +97,11 @@
     <Content Include="typescript\salesforce.windows.smartsync.js" />
     <Content Include="typescript\salesforce.windows.smartsync.js.map" />
     <TypeScriptCompile Include="typescript\salesforce.windows.smartsync.ts" />
-    <Content Include="typescript\salesforce.windows.smartsync.ts" />
-    <Content Include="typings\Salesforce.SDK.Hybrid.d.ts" />
-    <Content Include="typings\Salesforce.SDK.Hybrid.SmartStore.d.ts" />
-    <Content Include="typings\Salesforce.SDK.Hybrid.SmartSync.d.ts" />
-    <Content Include="typings\winrt.d.ts" />
+    <TypeScriptCompile Include="typings\Salesforce.SDK.Hybrid.d.ts" />
+    <TypeScriptCompile Include="typings\Salesforce.SDK.Hybrid.SmartStore.d.ts" />
+    <TypeScriptCompile Include="typings\Salesforce.SDK.Hybrid.SmartSync.d.ts" />
+    <TypeScriptCompile Include="typings\winjs-3.0.d.ts" />
+    <TypeScriptCompile Include="typings\winrt.d.ts" />
     <Content Include="WinJS\css\ui-dark.css" />
     <Content Include="WinJS\css\ui-dark.min.css" />
     <Content Include="WinJS\css\ui-light.css" />
@@ -121,11 +119,6 @@
     <Content Include="WinJS\License.txt" />
     <Content Include="WinJS\README.md" />
     <None Include="Salesforce.Sample.SmartSyncExplorerHybrid_TemporaryKey.pfx" />
-    <TypeScriptCompile Include="typings\Salesforce.SDK.Hybrid.d.ts" />
-    <TypeScriptCompile Include="typings\Salesforce.SDK.Hybrid.SmartStore.d.ts" />
-    <TypeScriptCompile Include="typings\Salesforce.SDK.Hybrid.SmartSync.d.ts" />
-    <TypeScriptCompile Include="typings\winjs-3.0.d.ts" />
-    <TypeScriptCompile Include="typings\winrt.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4a0dddb5-7a95-4fbf-97cc-616d07737a77}" />
@@ -136,7 +129,6 @@
     <ProjectReference Include="..\..\SalesforceMobileSDK-Windows\SalesforceSDK\Hybrid\Hybrid.csproj" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\$(WMSJSProjectDirectory)\Microsoft.VisualStudio.$(WMSJSProject).targets" />
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.jsproj.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.jsproj.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below then uncomment
