@@ -52,14 +52,13 @@ module SmartSyncJS {
             return this.smartSync.SyncManager.getInstance();
         }
 
-        public syncDown(success, fail, args) {
+        public syncDown(args) {
             var syncmanager = this.getInstance();
             if (!syncmanager) {
-                fail("Error in getting instance for SmartSync");
+                console.log("Error in getting instance for SmartSync");
             }
             else {
-                var syncState = syncmanager.syncDown(args[0], args[1], args[2], args[3]);
-                success(syncState);
+                var sync = syncmanager.syncDown(args[0], args[1], args[2]);
             }
         }
 
@@ -76,14 +75,13 @@ module SmartSyncJS {
             }
         }
 
-        public syncUp(success, fail, args) {
+        public syncUp(args) {
             var syncmanager = this.getInstance();
             if (!syncmanager) {
-                fail("Error in getting instance for SmartSync");
+                console.log("Error in getting instance for SmartSync");
             }
             else {
-                var syncState = syncmanager.syncUp(args[0], args[1], args[2], null);
-                success(syncState);
+                var syncState = syncmanager.syncUp(args[0], args[1], args[2]);
             }
         }
 

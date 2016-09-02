@@ -30,14 +30,13 @@
 
 
 declare module Salesforce.SDK.Hybrid.SmartSync {
-
     export interface ISyncManagerClass {
         getSyncStatus(syncId: number): Salesforce.SDK.Hybrid.SmartSync.Models.SyncState;
         reSync(syncId: number, callback: string): Salesforce.SDK.Hybrid.SmartSync.Models.SyncState;
         runSync(sync: Salesforce.SDK.Hybrid.SmartSync.Models.SyncState, callback: string): void;
         sendRestRequest(request: Salesforce.SDK.Hybrid.Rest.RestRequest): Windows.Foundation.IAsyncOperation<Salesforce.SDK.Hybrid.Rest.RestResponse>;
-        syncDown(target: string, soupName: string, callback: string, options: Salesforce.SDK.Hybrid.SmartSync.Models.SyncOptions): Salesforce.SDK.Hybrid.SmartSync.Models.SyncState;
-        syncUp(target: Salesforce.SDK.Hybrid.SmartSync.Models.SyncUpTarget, options: Salesforce.SDK.Hybrid.SmartSync.Models.SyncOptions, soupName: string, callback: string): Salesforce.SDK.Hybrid.SmartSync.Models.SyncState;
+        syncDown(target: string, soupName: string, options: Salesforce.SDK.Hybrid.SmartSync.Models.SyncOptions): Salesforce.SDK.Hybrid.SmartSync.Models.SyncState;
+        syncUp(target: Salesforce.SDK.Hybrid.SmartSync.Models.SyncUpTarget, options: Salesforce.SDK.Hybrid.SmartSync.Models.SyncOptions, soupName: string): Salesforce.SDK.Hybrid.SmartSync.Models.SyncState;
     }
 
     export class SyncManager implements Salesforce.SDK.Hybrid.SmartSync.ISyncManagerClass {
@@ -51,8 +50,8 @@ declare module Salesforce.SDK.Hybrid.SmartSync {
         reSync(syncId: number, callback: string): Salesforce.SDK.Hybrid.SmartSync.Models.SyncState;
         runSync(sync: Salesforce.SDK.Hybrid.SmartSync.Models.SyncState, callback: string): void;
         sendRestRequest(request: Salesforce.SDK.Hybrid.Rest.RestRequest): Windows.Foundation.IAsyncOperation<Salesforce.SDK.Hybrid.Rest.RestResponse>;
-        syncDown(target: string, soupName: string, callback: string, options: Salesforce.SDK.Hybrid.SmartSync.Models.SyncOptions): Salesforce.SDK.Hybrid.SmartSync.Models.SyncState;
-        syncUp(target: Salesforce.SDK.Hybrid.SmartSync.Models.SyncUpTarget, options: Salesforce.SDK.Hybrid.SmartSync.Models.SyncOptions, soupName: string, callback: string): Salesforce.SDK.Hybrid.SmartSync.Models.SyncState;
+        syncDown(target: string, soupName: string, options: Salesforce.SDK.Hybrid.SmartSync.Models.SyncOptions): SDK.Hybrid.SmartSync.Models.SyncState;
+        syncUp(target: Salesforce.SDK.Hybrid.SmartSync.Models.SyncUpTarget, options: Salesforce.SDK.Hybrid.SmartSync.Models.SyncOptions, soupName: string): Salesforce.SDK.Hybrid.SmartSync.Models.SyncState;
         toString(): string;
     }
 
