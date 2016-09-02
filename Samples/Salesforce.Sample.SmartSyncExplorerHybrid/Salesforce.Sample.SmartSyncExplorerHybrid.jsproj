@@ -102,11 +102,6 @@
     <TypeScriptCompile Include="typings\Salesforce.SDK.Hybrid.SmartSync.d.ts" />
     <TypeScriptCompile Include="typings\winjs-3.0.d.ts" />
     <TypeScriptCompile Include="typings\winrt.d.ts" />
-    <Content Include="typings\Salesforce.SDK.Hybrid.d.ts" />
-    <Content Include="typings\Salesforce.SDK.Hybrid.SmartStore.d.ts" />
-    <Content Include="typings\Salesforce.SDK.Hybrid.SmartSync.d.ts" />
-    <Content Include="typings\winjs-3.0.d.ts" />
-    <Content Include="typings\winrt.d.ts" />
     <Content Include="WinJS\css\ui-dark.css" />
     <Content Include="WinJS\css\ui-dark.min.css" />
     <Content Include="WinJS\css\ui-light.css" />
