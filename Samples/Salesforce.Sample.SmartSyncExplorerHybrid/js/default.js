@@ -9,78 +9,7 @@
     var smartsync = new SmartSyncJS.SmartSync();
     var queryspec = new SmartStoreJS.QuerySpec();
 
-    var fetchServers = function () {
-        var listItemsHtml = document.querySelector('#servers');
-        for (var i = 0; i < oauth.servers.serverList.length; i++) {
-            var server = oauth.servers.serverList[i];
-            var buttonli = document.createElement("li");
-            var buttondiv = document.createElement("div");
-            var userButton = document.createElement("button");
-            buttonli.setAttribute("class", "table-view-cell");
-            buttonli.setAttribute("align", "center");
-            buttondiv.setAttribute("class", "media-body");
-            userButton.addEventListener("click", serverItem(server), false);
-            userButton.innerText = "Login User to: " + server.address;
-            buttondiv.appendChild(userButton);
-            buttonli.appendChild(buttondiv);
-            listItemsHtml.appendChild(buttonli);
-        }
-    }
-
-    var fetchUsers = function () {
-        var accounts;
-        var account;
-
-        oauth.getUser(function success(result) {
-            account = result;
-        });
-        oauth.getUsers(function success(result) {
-            accounts = result;
-        });
-        var buttonli;
-        var buttondiv;
-        var userButton;
-        var listItemsHtml = document.querySelector('#users');
-        if (accounts != null) {
-            for (var x = 0; x < accounts.length; x++) {
-                var current = accounts[x];
-                if (current.userId == account.userId) {
-                    var li = document.createElement("li");
-                    var div = document.createElement("div");
-
-                    li.setAttribute("class", "table-view-cell");
-                    div.setAttribute("class", "media-body");
-
-                    div.innerHTML = current.userName;
-                    li.appendChild(div);
-                    listItemsHtml.appendChild(li);
-                } else {
-                    buttonli = document.createElement("li");
-                    buttondiv = document.createElement("div");
-                    userButton = document.createElement("button");
-                    buttonli.setAttribute("class", "table-view-cell");
-                    buttonli.setAttribute("align", "center");
-                    buttondiv.setAttribute("class", "media-body");
-                    userButton.addEventListener("click", userItem(current), false);
-                    userButton.innerText = current.userName;
-                    buttondiv.appendChild(userButton);
-                    buttonli.appendChild(buttondiv);
-                    listItemsHtml.appendChild(buttonli);
-                }
-            }
-            buttonli = document.createElement("li");
-            buttondiv = document.createElement("div");
-            var logoutButton = document.createElement("button");
-            buttonli.setAttribute("class", "table-view-cell");
-            buttonli.setAttribute("align", "center");
-            buttondiv.setAttribute("class", "media-body");
-            logoutButton.addEventListener("click", logout, false);
-            logoutButton.innerText = "Logout";
-            buttondiv.appendChild(logoutButton);
-            buttonli.appendChild(buttondiv);
-            listItemsHtml.appendChild(buttonli);
-        }
-    }
+    
 
     var userItem = function (account) {
         return function () { switchUser(account); }
@@ -119,7 +48,7 @@
             }, ["contacts", idArray]);
 
             contact[0].__local__ = true;
-            contact[0].__locallyDeleted__ = true;
+            contact[0].__locally_deleted__ = true;
 
             smartstore.upsertSoupEntries(function () {
                 var details = document.getElementById("contactdetails");
@@ -163,55 +92,65 @@
         details.setAttribute("style", "display: block;");
     }
 
-    var loaddatafromsmartstore = function (element) {
-        smartstore.hasSoup(function () {
-            var spec = queryspec.buildAllQuerySpec("contacts", "Name", "ascending", 4000);
-            smartstore.querySoup(function (results) {
-                var contacts = JSON.parse(results);
-                var listItemsHtml = document.querySelector('#contacts');
-                for (var i = 0; i < contacts.length; i++) {
-                    if (!contacts[i].__locallyDeleted__) {
-                        if (element != null) {
-                            if (contacts[i].id === element.id) {
-                                contacts[i] = element;
+    var loaddatafromsmartstore = function(element) {
+        smartstore.hasSoup(function(success) {
+            if (success === true) {
+                var spec = queryspec.buildAllQuerySpec("contacts", "Name", "ascending", 4000);
+                smartstore.querySoup(function(results) {
+                    if (results) {
+                        var contacts = JSON.parse(results);
+                        var listItemsHtml = document.querySelector('#contacts');
+                        for (var i = 0; i < contacts.length; i++) {
+                            if (!contacts[i].__locally_deleted__) {
+                                if (element != null) {
+                                    if (contacts[i].id === element.id) {
+                                        contacts[i] = element;
+                                    }
+                                }
+                                var li = document.createElement("li");
+                                var div = document.createElement("div");
+                                //Setup li element
+                                li.setAttribute("class", "table-view-cell");
+                                li.setAttribute("id", "contact" + contacts[i].Id);
+                                //Set up div that holds the contact info
+                                div.setAttribute("class", "media-body");
+                                div.innerHTML = contacts[i].Name;
+                                //Ad div to li element
+                                li.appendChild(div);
+                                //Add everything to the contacts div
+                                listItemsHtml.appendChild(li);
+                                li.addEventListener("click", function (row) {
+                                    return function () {
+                                        navigatetodetails(row);
+                                    };
+                                }(contacts[i]));
                             }
                         }
-                        var li = document.createElement("li");
-                        var div = document.createElement("div");
-                        //Setup li element
-                        li.setAttribute("class", "table-view-cell");
-                        li.setAttribute("id", "contact" + contacts[i].Id);
-                        //Set up div that holds the contact info
-                        div.setAttribute("class", "media-body");
-                        div.innerHTML = contacts[i].Name;
-                        //Ad div to li element
-                        li.appendChild(div);
-                        //Add everything to the contacts div
-                        listItemsHtml.appendChild(li);
-                        li.addEventListener("click", function (row) {
-                            return function () {
-                                navigatetodetails(row);
-                            };
-                        }(contacts[i]));
                     }
-                }
-            }, function () {
-                return;
-            }, [spec, 0]);
-
-        }, function () {
-            console.log("Soup Does not Exist!");
-        }, ["contacts"]);
+                }, function(error) {
+                    console.log(error);
+                }, [spec, 0]);
+            }
+        }, function(error) {
+            console.log(error);
+        }, ["contacts"]); 
     }
 
     var handlesyncupdate = function (sync) {
-        if (sync.status !== 0) {
+        if (sync.status === 2) {
             return;
         }
         switch (sync.syncType) {
             case 0:
-                loaddatafromsmartstore(null);
+                if (sync.progress < 100) {
+                    console.log("Sync in progress");
+                } else {
+                    loaddatafromsmartstore(null);
+                }
+
                 break;
+            case 1:
+                loaddatafromsmartstore(null);
         }
     }
 
@@ -230,7 +169,7 @@
         var indexspec = [
             new SmartStoreJS.IndexSpec("Id", smartstoretype.smartString.columnType),
             new SmartStoreJS.IndexSpec("Name", smartstoretype.smartString.columnType),
-            new SmartStoreJS.IndexSpec("__locallycreated__", smartstoretype.smartString.columnType),
+            new SmartStoreJS.IndexSpec("__locally_created__", smartstoretype.smartString.columnType),
             new SmartStoreJS.IndexSpec("__locally_updated__", smartstoretype.smartString.columnType),
             new SmartStoreJS.IndexSpec("__locally_deleted__", smartstoretype.smartString.columnType),
             new SmartStoreJS.IndexSpec("__local__", smartstoretype.smartString.columnType)
@@ -243,12 +182,7 @@
         }, ["contacts", indexspec]);
         if (syncId === -1) {
             var target = new Salesforce.SDK.Hybrid.SmartSync.Models.SoqlSyncDownTarget(soql);
-            smartsync.syncDown(function success(result) {
-                handlesyncupdate(result);
-            }, function fail(result) {
-                console.log(result);
-            },
-            [target.asJson(), "contacts", null, null]);
+            smartsync.syncDown([target.asJson(), "contacts", null]);
             loaddatafromsmartstore(null);
         }
         else {
@@ -294,13 +228,7 @@
             var options = Salesforce.SDK.Hybrid.SmartSync.Models.SyncOptions.optionsForSyncUp(fieldlist, mergemodeoptions.leaveIfChanged);
             var target = new Salesforce.SDK.Hybrid.SmartSync.Models.SyncUpTarget();
             var args = [target, options, "contacts"];
-            smartsync.syncUp(function success(result) {
-                syncState = result;
-                handlesyncupdate(syncState);
-            }, function fail(result) {
-                console.log(result);
-            },
-            args);
+            smartsync.syncUp(args);
             loaddatafromsmartstore(null);
         } else {
             //Show a toast stating no netwrok available
@@ -388,7 +316,7 @@
             var id = document.getElementById("contactid").value;
             var soupEntryId = document.getElementById("soupentryid").value;
         }
-        var attributes = { Type: "Contact" };
+        var attributes = { type: "Contact" };
         var contact = {
             Id: id,
             Firstname: firstname,
@@ -399,9 +327,9 @@
             Email: email,
             Department: department,
             __local__: true,
-            __locallyUpdated__: !isCreated,
-            __locallyCreated__: isCreated,
-            __locallyDeleted__: false,
+            __locally_updated__: !isCreated,
+            __locally_created__: isCreated,
+            __locally_deleted__: false,
             _soupEntryId: soupEntryId
         };
         if (isCreated) {
@@ -418,6 +346,7 @@
                 console.log("Error in saving to smartstore")
             }, ["contacts", [contact]]);
         }
+        refresh();
     }
 
     var clearRecords = function (table) {
@@ -432,14 +361,14 @@
 
     var startup = function () {
         oauth.configureOAuth("data/bootconfig.json", null)
-            .then(function () {
+            .then(function() {
                 oauth.getUsers(function success(result) {
                     refresh();
 
                 }, function fail(result) {
-                    oauth.loginDefaultServer().done(function () {
+                    oauth.loginDefaultServer().done(function() {
                         refresh();
-                    }, function (error) {
+                    }, function(error) {
                         startup();
                     });
                 });
@@ -456,7 +385,6 @@
             args.setPromise(WinJS.UI.processAll());
         }
     };
-
     app.oncheckpoint = function (args) {
         // TODO: This application is about to be suspended. Save any state
         // that needs to persist across suspensions here. You might use the
@@ -464,13 +392,6 @@
         // saved and restored across suspension. If you need to complete an
         // asynchronous operation before your application is suspended, call
         // args.setPromise().
-    };
-
-    // Generic error handler that does not terminate the app.
-    app.onerror = function errorHandler(e) {
-        appTrace.trace("Unhandled Error", "We failed to catch the following error, file a bug!", true);
-        appTrace.traceError(e);
-        return true; // We do not want the app to terminate.
     };
 
     app.start();

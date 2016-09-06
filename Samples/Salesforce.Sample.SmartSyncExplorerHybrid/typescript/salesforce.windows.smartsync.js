@@ -46,14 +46,13 @@ var SmartSyncJS;
         SmartSync.prototype.getInstance = function () {
             return this.smartSync.SyncManager.getInstance();
         };
-        SmartSync.prototype.syncDown = function (success, fail, args) {
+        SmartSync.prototype.syncDown = function (args) {
             var syncmanager = this.getInstance();
             if (!syncmanager) {
-                fail("Error in getting instance for SmartSync");
+                console.log("Error in getting instance for SmartSync");
             }
             else {
-                var syncState = syncmanager.syncDown(args[0], args[1], args[2], args[3]);
-                success(syncState);
+                var sync = syncmanager.syncDown(args[0], args[1], args[2]);
             }
         };
         SmartSync.prototype.reSync = function (success, fail, args) {
@@ -67,14 +66,13 @@ var SmartSyncJS;
                 success("Complete re-sync");
             }
         };
-        SmartSync.prototype.syncUp = function (success, fail, args) {
+        SmartSync.prototype.syncUp = function (args) {
             var syncmanager = this.getInstance();
             if (!syncmanager) {
-                fail("Error in getting instance for SmartSync");
+                console.log("Error in getting instance for SmartSync");
             }
             else {
-                var syncState = syncmanager.syncUp(args[0], args[1], args[2], null);
-                success(syncState);
+                var syncState = syncmanager.syncUp(args[0], args[1], args[2]);
             }
         };
         SmartSync.prototype.getSyncStatus = function (success, fail, args) {
