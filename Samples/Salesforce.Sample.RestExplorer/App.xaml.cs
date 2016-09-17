@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Windows.Security.Cryptography.Core;
+using Windows.Storage;
 using Windows.UI.Xaml.Navigation;
 using Salesforce.SDK.App;
 using Salesforce.SDK.Auth;
@@ -10,6 +12,7 @@ using Salesforce.SDK.Security;
 using Salesforce.SDK.Strings;
 using Salesforce.Sample.RestExplorer.Shared;
 using Salesforce.Sample.RestExplorer.Store;
+using Salesforce.SDK.Settings;
 
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=402347&clcid=0x409
 
@@ -45,9 +48,20 @@ namespace Salesforce.Sample.RestExplorer
         protected override Task InitializeConfig()
         {
             SDKServiceLocator.RegisterService<IEncryptionService, Encryptor>();
-            SDKServiceLocator.RegisterService<ILoggingService, Logger>();
-            Encryptor.init(new EncryptionSettings(new HmacSHA256KeyGenerator()));
+            Encryptor.init(new EncryptionSettings(new HmacSHA256KeyGenerator(HashAlgorithmNames.Sha256)));
             var config = SDKManager.InitializeConfigAsync<Config>().Result;
+            return config.SaveConfigAsync();
+        }
+
+        protected override Task UpgradeConfigAsync()
+        {
+            if (!ApplicationData.Current.Version.Equals(0)) return Task.CompletedTask;
+            var config = SalesforceConfig.RetrieveConfig<Config>().Result;
+            if (config == null) return Task.CompletedTask;
+            Encryptor.init(new EncryptionSettings(new HmacSHA256KeyGenerator(HashAlgorithmNames.Md5)));
+            config = SDKManager.InitializeConfigAsync<Config>().Result;
+            Encryptor.ChangeSettings(
+                new EncryptionSettings(new HmacSHA256KeyGenerator(HashAlgorithmNames.Sha256)));
             return config.SaveConfigAsync();
         }
 
