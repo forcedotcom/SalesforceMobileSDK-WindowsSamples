@@ -86,7 +86,6 @@
     <Content Include="js\underscore-min.js" />
     <Content Include="Newtonsoft.Json.dll" />
     <Content Include="packages.config" />
-    <Content Include="sqlite3.dll" />
     <Content Include="SQLitePCL.Ext.dll" />
     <Content Include="typescript\salesforce.windows.core.js" />
     <Content Include="typescript\salesforce.windows.core.js.map" />
