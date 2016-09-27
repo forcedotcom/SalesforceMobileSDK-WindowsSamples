@@ -8,6 +8,8 @@
     var smartstore = new SmartStoreJS.SmartStore();
     var smartsync = new SmartSyncJS.SmartSync();
     var queryspec = new SmartStoreJS.QuerySpec();
+    var syncmanager;
+    var ev;
 
     
 
@@ -180,13 +182,20 @@
         }, function () {
             console.log("Error in registering soup");
         }, ["contacts", indexspec]);
+        ev = new Salesforce.SDK.Hybrid.SmartSync.SyncEvent();
+        ev.addEventListener("syncupdateevent", function (syncEvent) {
+            var detail = syncEvent.detail;
+            if (detail._soupEntryId !== undefined) {
+                //do not do anything
+            }
+        });
         if (syncId === -1) {
             var target = new Salesforce.SDK.Hybrid.SmartSync.Models.SoqlSyncDownTarget(soql);
-            smartsync.syncDown([target.asJson(), "contacts", null]);
+            syncmanager.syncDown(ev, target.asJson(), "contacts", null);
             loaddatafromsmartstore(null);
         }
         else {
-            syncmanager.reSync(syncId, handlesyncupdate);
+            syncmanager.reSync(ev, syncId, handlesyncupdate);
         }
     }
 
@@ -227,8 +236,7 @@
             var mergemodeoptions = Salesforce.SDK.Hybrid.SmartSync.Models.MergeModeOptions;
             var options = Salesforce.SDK.Hybrid.SmartSync.Models.SyncOptions.optionsForSyncUp(fieldlist, mergemodeoptions.leaveIfChanged);
             var target = new Salesforce.SDK.Hybrid.SmartSync.Models.SyncUpTarget();
-            var args = [target, options, "contacts"];
-            smartsync.syncUp(args);
+            syncmanager.syncUp(ev, target, options, "contacts");
             loaddatafromsmartstore(null);
         } else {
             //Show a toast stating no netwrok available
@@ -361,8 +369,9 @@
 
     var startup = function () {
         oauth.configureOAuth("data/bootconfig.json", null)
-            .then(function() {
-                oauth.getUsers(function success(result) {
+            .then(function () {
+                //TODO: Will change back to support multiple users scenario once fix the ComTypeMarshalling_MissingInteropData issue on the release build
+                oauth.getUser(function success(result) {
                     refresh();
 
                 }, function fail(result) {
