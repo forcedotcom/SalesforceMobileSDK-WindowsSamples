@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no;" />
+    <title>SmartSyncExplorer Hybrid</title>
+
+    <!-- WinJS references -->
+    <script src="/WinJS/js/base.js"></script>
+    <script src="/typescript/salesforce.windows.core.js"></script>
+    <script src="/typescript/salesforce.windows.smartstore.js"></script>
+    <script src="/typescript/salesforce.windows.smartsync.js"></script>
+
+    <!-- Salesforce.SDK.TypeScript references -->
+    <link href="/css/ratchet.css" rel="stylesheet" />
+    <link href="/css/styles.css" rel="stylesheet" />
+    <script src="/js/default.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/underscore-min.js"></script>
+    <script src="js/backbone-min.js"></script>
+    <script src="js/fastclick.js"></script>
+    <script src="js/stackrouter.js"></script>
+</head>
+<body>
+    <header>
+        <div class="bar bar-nav">
+            <h1 class="title">Contacts</h1>
+            <button id="syncbutton" class="btn btn-nav btn-positive pull-right sync">Sync</button>
+            <button id="addbutton" class="btn btn-nav btn-positive pull-right add">Add</button>
+        </div>
+    </header>
+    <div class="content">
+        <ul id="contacts" class="table-view" style="display: none;">
+            <!-- Placeholder to add users list -->
+        </ul>
+        <div id="contactdetails" style="display: none;">
+            <div class="content-padded">
+                <div class="details">
+                    <input id="soupentryid" type="hidden" name="soupentryid">
+                    <input id="contactid" type="hidden" name="contactid">
+                    <input id="firstname" placeholder="FirstName" type="text" name="FirstName" /><br />
+                    <input id="lastname" placeholder="LastName" type="text" name="LastName" /><br />
+                    <input id="title" placeholder="Title" type="text" name="Title" /><br />
+                    <input id="email" placeholder="Email address" type="text" name="Email" />
+                    <input id="department" placeholder="Department" type="text" name="Department" /><br />
+                    <input id="homephone" placeholder="Phone" type="text" name="Phone" /><br />
+                    <div>
+                        <button id="backbutton" class="btn btn-nav btn-positive pull-left save">Back</button>
+                    </div>
+                    <div>
+                        <button id="savebutton" class="btn btn-nav btn-positive pull-right save">Save</button>
+                    </div>
+                    <div>
+                        <button id="deletebutton" class="btn btn-nav btn-positive pull-right save">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bar bar-footer">
+        <div>
+            <button id="logoutbutton" class="btn btn-nav pull-right save">Logout</button>
+        </div>
+    </footer>
+</body>
+</html>

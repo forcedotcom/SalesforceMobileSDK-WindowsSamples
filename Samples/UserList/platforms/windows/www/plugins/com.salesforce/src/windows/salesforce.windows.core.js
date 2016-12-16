@@ -1,5 +1,5 @@
 cordova.define("com.salesforce.SalesforceCore", function(require, exports, module) { /*
-* Copyright (c) 2015, salesforce.com, inc.
+* Copyright (c) 2015-present, salesforce.com, inc.
 * All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without modification, are permitted provided

@@ -1,5 +1,5 @@
-﻿/*
- * Copyright (c) 2014, salesforce.com, inc.
+/*
+ * Copyright (c) 2014-present, salesforce.com, inc.
  * All rights reserved.
  * Redistribution and use of this software in source and binary forms, with or
  * without modification, are permitted provided that the following conditions
@@ -263,7 +263,7 @@ namespace Salesforce.Sample.SmartSyncExplorer.ViewModel
         private void HandleSyncUpdate(SyncState sync)
         {
             if (SyncState.SyncStatusTypes.Done != sync.Status) return;
-            switch (sync.SyncType)
+            switch (sync.Type)
             {
                 case SyncState.SyncTypes.SyncUp:
                     RemoveDeleted();

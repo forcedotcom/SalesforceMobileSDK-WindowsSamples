@@ -1,5 +1,5 @@
-﻿/*
- * Copyright (c) 2014, salesforce.com, inc.
+/*
+ * Copyright (c) 2014-present, salesforce.com, inc.
  * All rights reserved.
  * Redistribution and use of this software in source and binary forms, with or
  * without modification, are permitted provided that the following conditions
@@ -38,13 +38,14 @@ using Salesforce.SDK.Auth;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 using Salesforce.SDK.Native;
+using Salesforce.SDK.SmartStore.Store;
 
 namespace Salesforce.Sample.SmartSyncExplorer.Shared.Pages
 {
     /// <summary>
     ///     An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MainPage : NativeMainPage
+    public sealed partial class MainPage : Page
     {
         public MainPage()
         {
@@ -99,15 +100,18 @@ namespace Salesforce.Sample.SmartSyncExplorer.Shared.Pages
 
         private async void Logout(object sender, RoutedEventArgs e)
         {
-            ContactsDataModel.ClearSmartStore();
-            if (SDKManager.GlobalClientManager != null)
+            var store = SmartStore.GetSmartStore(AccountManager.GetAccount());
+            if (store == null)
             {
-                await SDKManager.GlobalClientManager.Logout();
+                ContactsDataModel.ClearSmartStore();
+                if (SDKManager.GlobalClientManager != null)
+                {
+                    await SDKManager.GlobalClientManager.LogoutAsync();
+                }
+                AccountManager.SwitchAccount();                
             }
-            AccountManager.SwitchAccount();
+            await store.LogoutAsync();
         }
-
-
         private async void DisplayProgressFlyout(string text)
         {
             MessageContent.Text = text;
